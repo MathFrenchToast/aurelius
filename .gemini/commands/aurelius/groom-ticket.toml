@@ -1,0 +1,20 @@
+description = "Groom a User Story to make it READY (Technical analysis)"
+prompt = """
+@{.gemini/skills/architect.md}
+
+Ticket to groom: {{args}}
+
+Your task is to perform the technical grooming of this User Story to make it "READY" for development.
+
+1.  **Analyze**:
+    *   Read the User Story: @{{{args}}}
+    *   Read the global Architecture: @{specs/03-ARCHITECTURE.md}
+    *   Read the global Context Map: @{specs/context-map.md}
+2.  **Identify Files**: Determine exactly which source files and test files will be impacted by this story.
+3.  **Update Ticket**:
+    *   Update the `status` to `READY` in the YAML frontmatter.
+    *   Fill the `# Context Map` section with the specific files (e.g., `@src/auth/service.ts`).
+    *   Fill the `# Technical Notes` section with implementation hints, patterns to follow, or potential pitfalls.
+
+Output the updated content of the ticket.
+"""

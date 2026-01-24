@@ -2,8 +2,6 @@
 
 A light, IA-native development methodology for Gemini CLI and Claude Code.
 Based on the **Kanban-as-Code** principle and split contexts.
-see [full spec here](./SpecMethodDevLite.md)
-
 
 ## Installation / Update
 
@@ -17,16 +15,31 @@ To initialize a new project or update the methodology in an existing one:
 ```
 
 This script will:
-*   Install/Update `.gemini/` skills and commands.
+*   Install/Update `.gemini/` skills and namespaced commands (`/aurelius:...`).
 *   Setup the `specs/` and `backlog/` folder structure.
 *   Initialize template files if they don't already exist.
+
+## Interactive vs. Auto Mode
+
+The **Product Manager** and **Product Owner** roles support two modes of operation:
+
+*   **Interactive Mode (Default):** The agent will pause and ask for clarification if a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible. This ensures 100% alignment with your vision.
+*   **Auto Mode:** By adding the keyword `auto` anywhere in your command arguments, you signal the agent to proceed autonomously.
+    *   It will make logical assumptions based on industry best practices.
+    *   It will fill in missing details (validation rules, error states) without interrupting.
+    *   It will list its assumptions at the start of the output.
+
+**Example:**
+`gemini aurelius:gen-tickets "Auth System auto"`
 
 ## Workflow Summary
 
 1.  **Init/Update:** `./init-or-update-project.sh <target>`
-2.  **Bootstrap:** `gemini 2-bootstrap-specs --concept "Description..."`
-3.  **Plan:** `gemini 3-plan-feature --request "Add Auth"`
-4.  **Tickets:** `gemini 4-gen-tickets`
-5.  **Dev:** `gemini 5-dev-task --ticket_path backlog/TODO/US-xxx.md`
-6.  **Finalize:** `gemini 6-finalize`
+2.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"` (Use 'auto' for autonomy)
+3.  **Plan:** `gemini aurelius:plan-feature --request "Add Auth"`
+4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
+5.  **Grooming:** `gemini aurelius:groom-ticket backlog/TODO/US-xxx.md` (Architect makes it READY)
+6.  **Dev:** `gemini aurelius:dev-ticket backlog/TODO/US-xxx.md`
+6.  **Finalize:** `gemini aurelius:finalize-ticket`
 
+See `SpecMethodDevLite.md` for the full technical documentation.
