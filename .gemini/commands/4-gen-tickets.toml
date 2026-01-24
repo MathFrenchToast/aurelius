@@ -14,11 +14,15 @@ Read:
 *   @backlog/template-us.md
 
 Instructions:
-1.  Identify Epics or features that need to be broken down.
-2.  Create new User Story files in `backlog/TODO/` using the format in `backlog/template-us.md`.
-3.  Naming convention: `US-{id}-{short-description}.md`.
-4.  Ensure each story has a clear Description and initial Acceptance Criteria.
-5.  Leave the 'Technical Notes' section empty for the Architect to fill later (or fill it if you are sure).
+1.  **Identify**: Find Epics or features in `specs/04-EPICS.md` that are not yet broken down.
+2.  **Extract Rules**: Read the relevant sections in `specs/01-PRD.md` to find the Business Rules associated with these features.
+3.  **Create Tickets**: Generate new User Story files in `backlog/TODO/`.
+    *   Naming: `US-{id}-{short-description}.md`.
+    *   **Description**: Clear user benefit.
+    *   **Acceptance Criteria**:
+        *   Convert PRD rules into specific test cases.
+        *   Include at least one "Happy Path" and one "Error Path".
+        *   Example: "Given user has 0 credits, When they click buy, Then show error 'Insufficient funds'".
 
 Output a list of created tickets.
 """

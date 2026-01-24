@@ -13,8 +13,19 @@ As a [Role], I want to [Action] so that [Benefit].
 > *   @src/...
 
 # Acceptance Criteria (DoD)
-- [ ] Criteria 1
-- [ ] Criteria 2
+<!-- 
+Must be testable and binary (Pass/Fail).
+Include Success, Error, and Edge cases.
+-->
+
+- [ ] **Scenario 1:** [Happy Path]
+    - Given [Context]
+    - When [Action]
+    - Then [Result]
+- [ ] **Scenario 2:** [Error Case]
+    - Given [Context]
+    - When [Bad Action]
+    - Then [Error Message]
 
 # Technical Notes (Architect)
 <!-- Implementation details, constraints, specific libraries to use -->
