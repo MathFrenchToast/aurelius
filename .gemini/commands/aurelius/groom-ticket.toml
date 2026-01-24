@@ -12,6 +12,7 @@ Your task is to perform the technical grooming of this User Story.
 2.  **Context**:
     *   Read @{specs/03-ARCHITECTURE.md}
     *   Read @{specs/context-map.md}
+    *   Read @{specs/02-UX-DESIGN.md} (to ensure UI alignment)
 3.  **Update**:
     *   Add technical notes and specific context map to the ticket.
     *   Set status to `READY`.

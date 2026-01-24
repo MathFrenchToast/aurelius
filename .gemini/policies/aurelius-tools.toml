@@ -1,13 +1,13 @@
 # Aurelius - Tool Approval Policy
-# This policy allows basic safe tools to keep the workflow fluid.
+# Targeting both 'local_shell' and 'run_shell_command' for compatibility.
 
 [[rule]]
-toolName = "run_shell_command"
-commandPrefix = ["ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find", "git status", "git diff", "npm test", "npm run lint"]
+toolName = ["local_shell", "run_shell_command"]
+commandPrefix = ["ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find", "git status", "git diff", "git log", "git show", "git checkout", "npm test", "npm run lint"]
 decision = "allow"
-priority = 100
+priority = 999
 
 [[rule]]
 toolName = ["read_file", "write_file", "replace", "list_directory", "glob", "search_file_content"]
 decision = "allow"
-priority = 100
+priority = 999

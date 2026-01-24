@@ -1,77 +1,62 @@
-# **Spécification Technique : Méthode de Développement IA "Lite"**
+# **Spécification Technique : Méthode de Développement IA "Lite" (Aurelius)**
 
 ## **1. Vision et Philosophie**
 
-Cette méthode est une adaptation simplifiée de BMAD (**Build More, Architect Dreams**), conçue pour être **agnostique** (compatible Gemini CLI / Claude Code) et **native** (sans dépendance Node.js/Python externe).
-Elle supporte le cycle de vie complet du logiciel :
+Cette méthode est une adaptation simplifiée de BMAD (**Build More, Architect Dreams**), conçue pour être **agnostique** (Gemini CLI / Claude Code) et **native**. Elle repose sur trois piliers :
 
-1.  **Greenfield :** Création depuis zéro (Vision -> Specs -> Code).
-2.  **Brownfield / Maintenance :** Évolution et Hotfix (Code -> Specs -> Code).
-
-Le principe clé est le **"Kanban-as-Code"** : l'état du projet est déterminé par l'emplacement et le contenu de fichiers Markdown (User Stories) dans le dépôt Git.
+1.  **Kanban-as-Code :** L'état du projet est dicté par des fichiers Markdown dans `backlog/`.
+2.  **Contextes Segmentés :** Séparation entre Vision (`productContext.md`), Carte Technique (`context-map.md`) et Spécifications (`PRD`, `Architecture`).
+3.  **Minimalisme (KISS) :** Priorité à la solution la plus simple. Refus catégorique du sur-engineering et de l'optimisation prématurée.
 
 ## **2. Architecture du Projet (File System)**
 
-Tout projet utilisant la méthode Lite respectera cette structure :
 .
-├── .gemini/                # Configuration de l'IA
-│   ├── commands/
-│   │   └── aurelius/       # Les verbes (Namespaced Actions TOML)
-│   └── skills/             # Les rôles (Prompts Système MD)
-├── specs/                  # La "Vérité" (Living Documentation)
-│   ├── productContext.md   # **Cerveau** : Vision globale et Architecture (System Prompt)
-│   ├── context-map.md      # **Carte** : Index technique mapping Features -> Fichiers
-│   ├── 01-PRD.md           # Règles métier détaillées
-│   ├── 03-ARCHITECTURE.md  # Choix techniques et Conventions
-│   └── ...
-├── backlog/                # Le Flux de travail (TODO, WIP, DONE)
-├── src/                    # Le Code Source
-└── tests/                  # Les Tests Automatisés
+├── .gemini/
+│   ├── commands/aurelius/  # Workflows (bootstrap, plan, dev, finalize...)
+│   ├── skills/             # Personas (pm, po, arch, dev, reviewer, designer)
+│   └── policies/           # Auto-approbation des outils (Policies TOML)
+├── specs/                  # La Vérité (Documentation vivante)
+│   ├── productContext.md   # Vision haute et Tech Stack (System Prompt)
+│   ├── context-map.md      # Index technique (Feature -> Fichiers)
+│   ├── 00-BRIEF.md         # Objectifs et cibles
+│   ├── 01-PRD.md           # Règles métier
+│   ├── 02-UX-DESIGN.md     # Design textuel et flux écrans
+│   ├── 03-ARCHITECTURE.md  # Patterns, Standards (KISS, Clean Code)
+│   └── 04-EPICS.md         # Roadmap des grandes fonctionnalités
+├── backlog/                # TODO, WIP, DONE
+└── templates/              # Squelettes pour l'initialisation
 
-## **3. Les Commandes (Workflows)**
+## **3. Les Rôles (Skills)**
 
-Les commandes sont regroupées sous le namespace `aurelius:`.
+*   **Product Manager :** Discovery, bootstrapping des specs et de l'architecture initiale.
+*   **Product Owner :** Découpage des Epics en User Stories (INVEST) avec critères d'acceptation testables (Given/When/Then).
+*   **Architecte :** Gardien de la cohérence technique, de la `context-map.md` et du grooming des tickets. Détecte l'impact UI.
+*   **Designer UX :** Définit les parcours et l'interface de manière textuelle.
+*   **Developer :** Implémente via TDD. Applique KISS et Clean Code. Gère le passage en `WIP`.
+*   **Reviewer :** Vérifie la qualité, la modernité et archive vers `DONE`.
 
-### **A. Phase d'Initialisation & Update**
+## **4. Workflows (Namespace `aurelius:`)**
 
-*   **Setup:** Exécuter `./init-or-update-project.sh <target-dir>` depuis le repo Aurelius.
-*   **aurelius:bootstrap-specs**
-    *   *Skill:* Product Manager
-    *   *Input:* Idée brute (Concept) ou fichier `@spec.md`.
-    *   *Action:* Remplit `productContext.md`, `00-BRIEF.md`, `01-PRD.md`, `03-ARCHITECTURE.md` (Standards & Patterns) et `04-EPICS.md`.
+### **A. Initialisation**
+*   **Setup :** `./init-or-update-project.sh <target>` (Installe les dossiers, les skills et les policies).
+*   **aurelius:bootstrap-specs :** Initialise tous les documents de `specs/` à partir d'une idée.
 
-### **B. Cycle de Planification**
+### **B. Planification & Design**
+*   **aurelius:design :** (Optionnel) Définit l'UX globale ou spécifique à un ticket.
+*   **aurelius:plan :** Point d'entrée unique pour toute modification (Feature, Refacto, Infra). Met à jour les specs et crée les Epics.
+*   **aurelius:gen-tickets :** Découpe un Epic spécifique en User Stories dans `backlog/TODO/`.
+*   **aurelius:groom-ticket :** Prépare un ticket (Notes techniques + Context Map) et le passe à `READY`.
 
-*   **aurelius:plan**
-    *   *Skill:* Architect
-    *   *Input:* Demande libre (Feature, Infra, Refacto).
-    *   *Action:* Analyse, met à jour les specs (`PRD`, `Architecture`, `context-map`) et crée les Epics.
-*   **aurelius:gen-tickets**
-    *   *Skill:* Product Owner
-    *   *Input:* Nom de l'Epic (ex: "Gestion Profils").
-    *   *Action:* Génère les User Stories unitaires dans `backlog/TODO/` pour cet Epic uniquement.
-*   **aurelius:groom-ticket**
-    *   *Skill:* Architect
-    *   *Input:* ID ou chemin du ticket.
-    *   *Action:* Prépare techniquement le ticket (Context Map, Notes) et le passe à `READY`.
+### **C. Réalisation & Qualité**
+*   **aurelius:dev-ticket :** Implémente (TDD). Déplace vers `WIP`. **Interdiction de déplacer vers DONE.**
+*   **aurelius:finalize-ticket :** Review technique, Commit conventionnel et archivage vers `DONE`.
+*   **aurelius:hotfix :** Correction urgente, bypass les specs mais respecte l'architecture.
 
-### **C. Cycle de Réalisation**
+### **D. Modes de fonctionnement**
+*   **Mode Interactif (Par défaut) :** L'agent pose des questions en cas d'ambiguïté.
+*   **Mode Auto :** En ajoutant `auto` dans les arguments, l'agent prend des décisions basées sur les meilleures pratiques et liste ses hypothèses.
 
-*   **aurelius:dev-ticket**
-    *   *Skill:* Developer (Mode TDD)
-    *   *Action:* Implémente le ticket actif (Move to WIP, Test -> Code -> Refactor).
-*   **aurelius:finalize-ticket**
-    *   *Skill:* Reviewer
-    *   *Action:* Vérifie le travail, commit, et archive (Move to DONE).
+## **5. Hygiène et Performance**
 
-### **D. Maintenance Urgente**
-
-*   **aurelius:hotfix**
-    *   *Skill:* Developer (Senior)
-    *   *Action:* Correction chirurgicale avec test de non-régression.
-
-## **4. Hygiène du Contexte et Autorisations**
-
-Pour maintenir une efficacité maximale, cette méthode recommande :
-1.  **Clear Context fréquent** : Nettoyer le contexte entre chaque changement de rôle (ex: après un `plan` et avant un `gen-tickets`).
-2.  **Auto-approval** : Configurer le CLI pour autoriser sans confirmation les outils de base (`ls`, `mkdir`, `mv`, `rm`, `touch`, `sed`, `grep`, `npm test`). Cela permet de conserver la fluidité malgré les resets de session.
+1.  **Clear Context :** Recommandé entre chaque changement de rôle pour éviter la pollution de mémoire.
+2.  **Policies d'Approbation :** Utilisation de `.gemini/policies/aurelius-tools.toml` pour autoriser automatiquement les outils de base (`ls`, `mv`, `mkdir`, `npm test`, etc.) et maintenir la fluidité malgré les resets de contexte.

@@ -16,6 +16,7 @@ echo "Source: $SOURCE_DIR"
 echo "Target: $TARGET_DIR"
 
 # 1. Ensure Target Directories exist
+mkdir -p "$TARGET_DIR/.gemini"
 mkdir -p "$TARGET_DIR/.gemini/skills"
 mkdir -p "$TARGET_DIR/.gemini/commands/aurelius"
 mkdir -p "$TARGET_DIR/.gemini/policies"
@@ -25,11 +26,14 @@ mkdir -p "$TARGET_DIR/backlog/TODO"
 mkdir -p "$TARGET_DIR/backlog/WIP"
 mkdir -p "$TARGET_DIR/backlog/DONE"
 
-# 2. Update Config, Skills & Policies (Force Overwrite)
-echo "Updating configuration, skills and policies..."
+# 2. Update Config, Skills, Policies & Settings (Force Overwrite)
+echo "Updating configuration, skills, policies and settings..."
 cp -rf "$SOURCE_DIR/.gemini/skills/"* "$TARGET_DIR/.gemini/skills/"
 cp -rf "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/"
 cp -rf "$SOURCE_DIR/.gemini/policies/"* "$TARGET_DIR/.gemini/policies/"
+if [ -f "$SOURCE_DIR/.gemini/settings.json" ]; then
+    cp -f "$SOURCE_DIR/.gemini/settings.json" "$TARGET_DIR/.gemini/settings.json"
+fi
 cp -rf "$SOURCE_DIR/templates/"* "$TARGET_DIR/templates/"
 
 # 3. Bootstrap Specs (Copy only if not existing)

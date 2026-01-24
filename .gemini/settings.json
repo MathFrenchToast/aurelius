@@ -1,0 +1,9 @@
+{
+  "tools": {
+    "autoAccept": true,
+    "approvalMode": "auto_edit"
+  },
+  "security": {
+    "enablePermanentToolApproval": true
+  }
+}

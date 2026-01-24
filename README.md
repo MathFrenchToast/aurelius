@@ -32,15 +32,37 @@ The **Product Manager** and **Product Owner** roles support two modes of operati
 **Example:**
 `gemini aurelius:gen-tickets "Auth System auto"`
 
+## Self-Guided Workflow
+
+Aurelius agents are "workflow-aware". At the end of each task, the agent will recommend the next logical step to keep the project moving.
+
+```mermaid
+graph TD
+    User([User Idea]) --> PM[aurelius:bootstrap-specs]
+    PM -->|Recommend| Arch_Plan[aurelius:plan]
+    PM -->|Recommend| UX[aurelius:design]
+    Arch_Plan -->|Recommend| PO[aurelius:gen-tickets]
+    UX -->|Recommend| PO
+    PO -->|Recommend| Arch_Groom[aurelius:groom-ticket]
+    Arch_Groom -->|Status: READY| Dev[aurelius:dev-ticket]
+    Dev -->|Status: WIP| Rev[aurelius:finalize-ticket]
+    Rev -->|Status: DONE| Next{Backlog empty?}
+    Next -->|No| Arch_Groom
+    Next -->|Yes| Arch_Plan
+```
+
 ## Workflow Summary
 
-1.  **Init/Update:** `./init-or-update-project.sh <target>` (Auto-configures `.gemini/policies` for tool auto-approval)
-
+1.  **Init/Update:** `./init-or-update-project.sh <target>`
 2.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"`
-3.  **Plan:** `gemini aurelius:plan "Your request here (e.g. Add Docker, new feature, refactor) auto"`
-4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
-5.  **Grooming:** `gemini aurelius:groom-ticket US-xxx`
-6.  **Dev:** `gemini aurelius:dev-ticket US-xxx`
-7.  **Finalize:** `gemini aurelius:finalize-ticket`
+3.  **Design (Optional):** `gemini aurelius:design "global auto"`
+4.  **Plan:** `gemini aurelius:plan "Your request auto"`
+5.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
+6.  **Grooming:** `gemini aurelius:groom-ticket US-xxx`
+7.  **Dev:** `gemini aurelius:dev-ticket US-xxx`
+8.  **Finalize:** `gemini aurelius:finalize-ticket`
 
 See `SpecMethodDevLite.md` for the full technical documentation.
+
+if lost: 
+/aurelius:plan "Explain where we are in this project"   

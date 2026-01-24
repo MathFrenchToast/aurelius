@@ -4,13 +4,13 @@ prompt = """
 
 Your task is to review the work done for the active ticket in `backlog/WIP/`.
 
-1.  Identify the active ticket in `backlog/WIP/`.
-2.  Read the ticket and the modified files (use `git diff`).
-3.  Verify that Acceptance Criteria are met.
-4.  If successful:
+1.  **Identify**: Find the active ticket in `backlog/WIP/`.
+2.  **Analyze**: Read the ticket and the modified files (use `git diff`).
+3.  **Verify**: Ensure Acceptance Criteria are met and Clean Code/KISS principles are respected.
+4.  **Finalize (Success)**:
     *   Move the ticket to `backlog/DONE/`.
     *   Update status to `DONE`.
-    *   Generate a `git commit` command with a conventional commit message.
-5.  If failed:
-    *   Explain what is missing.
+    *   Generate a `git commit` command.
+5.  **Next Step**: Check `backlog/TODO/` and recommend the next action (Grooming, Dev, or Plan).
+6.  **Reject (Fail)**: Explain what is missing.
 """
