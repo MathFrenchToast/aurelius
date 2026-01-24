@@ -1,0 +1,29 @@
+[config]
+description = "Bootstrap the initial PRD and Brief from a raw idea"
+
+[agent]
+system = ".gemini/skills/product-manager.md"
+
+[instruction]
+template = """
+Initial Concept / Raw Input: {{args.concept}}
+
+Your task is to bootstrap the project specifications based on this input.
+
+1.  **Read Templates**:
+    *   @templates/prd-template.md
+    *   @specs/00-BRIEF.md (if it exists, or create a vision structure)
+
+2.  **Synthesize**:
+    *   Analyze the `concept` provided.
+    *   Draft the content for `specs/productContext.md` (System Prompt / Architecture Overview).
+    *   Draft the content for `specs/01-PRD.md` following the template structure.
+    *   Draft the content for `specs/00-BRIEF.md` (Product Vision, Target Audience, Goals).
+
+3.  **Output**:
+    *   Write `specs/productContext.md`.
+    *   Write `specs/00-BRIEF.md`.
+    *   Write `specs/01-PRD.md`.
+
+Ensure the "Context Map" table in the PRD is present but you can leave the paths empty for the Architect.
+"""

@@ -1,0 +1,22 @@
+[config]
+description = "fix a bug"
+
+[agent]
+system = ".gemini/skills/developer.md"
+
+[instruction]
+template = """
+Emergency Hotfix Request: {{args.issue}}
+
+Your task is to fix this bug immediately with minimal risk.
+
+1.  **Analyze**: Read `specs/03-ARCHITECTURE.md` to ensure you don't break conventions.
+2.  **Locate**: Identify the suspicious files based on the issue description.
+3.  **Fix**:
+    *   Create a reproduction test case if possible.
+    *   Apply the fix.
+    *   Verify.
+4.  **Report**: Explain the fix.
+
+Do NOT wait for full spec updates.
+"""

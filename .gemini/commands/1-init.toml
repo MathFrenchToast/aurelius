@@ -1,0 +1,28 @@
+[config]
+description = "Initialize the project structure and templates"
+
+[agent]
+system = ".gemini/skills/product-owner.md"
+
+[instruction]
+template = """
+You are initializing a new project using the 'SpecMethodDevLite'.
+
+Your task is to:
+1.  Verify if the `specs/` and `backlog/` directories exist. If not, create them.
+2.  Create the following folder structure:
+    *   `specs/diagrams/`
+    *   `backlog/TODO/`
+    *   `backlog/WIP/`
+    *   `backlog/DONE/`
+3.  Copy the templates from the `templates/` directory to `specs/` if they don't exist:
+    *   `templates/prd-template.md` -> `specs/01-PRD.md`
+    *   `templates/product-context-template.md` -> `specs/productContext.md`
+    *   `templates/context-map-template.md` -> `specs/context-map.md`
+    *   `templates/ux-template.md` -> `specs/02-UX-DESIGN.md`
+    *   `templates/architecture-template.md` -> `specs/03-ARCHITECTURE.md`
+4.  Create `specs/00-BRIEF.md` (Vision) and `specs/04-EPICS.md` (Features list) if missing.
+5.  Create `backlog/template-us.md` from `templates/user-story-template.md`.
+
+Do not overwrite existing files. Report what was created.
+"""
