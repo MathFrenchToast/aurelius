@@ -34,7 +34,7 @@ The **Product Manager** and **Product Owner** roles support two modes of operati
 
 ## Workflow Summary
 
-1.  **Init/Update:** `./init-or-update-project.sh <target>` (Auto-configures `.geminirc` for tool auto-approval)
+1.  **Init/Update:** `./init-or-update-project.sh <target>` (Auto-configures `.gemini/policies` for tool auto-approval)
 
 2.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"`
 3.  **Plan:** `gemini aurelius:plan "Your request here (e.g. Add Docker, new feature, refactor) auto"`
