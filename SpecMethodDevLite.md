@@ -38,7 +38,7 @@ Les commandes sont regroupées sous le namespace `aurelius:`.
 *   **aurelius:bootstrap-specs**
     *   *Skill:* Product Manager
     *   *Input:* Idée brute (Concept) ou fichier `@spec.md`.
-    *   *Action:* Remplit `productContext.md`, `00-BRIEF.md` et `01-PRD.md`.
+    *   *Action:* Remplit `productContext.md`, `00-BRIEF.md`, `01-PRD.md`, `03-ARCHITECTURE.md` (Standards & Patterns) et `04-EPICS.md`.
 
 ### **B. Cycle de Planification**
 
