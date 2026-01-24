@@ -34,12 +34,13 @@ The **Product Manager** and **Product Owner** roles support two modes of operati
 
 ## Workflow Summary
 
-1.  **Init/Update:** `./init-or-update-project.sh <target>`
-2.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"` (Use 'auto' for autonomy)
-3.  **Plan:** `gemini aurelius:plan-feature --request "Add Auth"`
+1.  **Init/Update:** `./init-or-update-project.sh <target>` (Auto-configures `.geminirc` for tool auto-approval)
+
+2.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"`
+3.  **Plan:** `gemini aurelius:plan "Your request here (e.g. Add Docker, new feature, refactor) auto"`
 4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
-5.  **Grooming:** `gemini aurelius:groom-ticket backlog/TODO/US-xxx.md` (Architect makes it READY)
-6.  **Dev:** `gemini aurelius:dev-ticket backlog/TODO/US-xxx.md`
-6.  **Finalize:** `gemini aurelius:finalize-ticket`
+5.  **Grooming:** `gemini aurelius:groom-ticket US-xxx`
+6.  **Dev:** `gemini aurelius:dev-ticket US-xxx`
+7.  **Finalize:** `gemini aurelius:finalize-ticket`
 
 See `SpecMethodDevLite.md` for the full technical documentation.

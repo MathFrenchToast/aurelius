@@ -42,17 +42,18 @@ Les commandes sont regroupées sous le namespace `aurelius:`.
 
 ### **B. Cycle de Planification**
 
-*   **aurelius:plan-feature**
+*   **aurelius:plan**
     *   *Skill:* Architect
-    *   *Action:* Met à jour `PRD`, `Architecture` et `context-map.md`.
+    *   *Input:* Demande libre (Feature, Infra, Refacto).
+    *   *Action:* Analyse, met à jour les specs (`PRD`, `Architecture`, `context-map`) et crée les Epics.
 *   **aurelius:gen-tickets**
     *   *Skill:* Product Owner
     *   *Input:* Nom de l'Epic (ex: "Gestion Profils").
-    *   *Action:* Génère les User Stories unitaires dans `backlog/TODO/`.
+    *   *Action:* Génère les User Stories unitaires dans `backlog/TODO/` pour cet Epic uniquement.
 *   **aurelius:groom-ticket**
     *   *Skill:* Architect
-    *   *Input:* Chemin du ticket dans `TODO`.
-    *   *Action:* Ajoute les notes techniques, la context-map spécifique et passe le statut à `READY`.
+    *   *Input:* ID ou chemin du ticket.
+    *   *Action:* Prépare techniquement le ticket (Context Map, Notes) et le passe à `READY`.
 
 ### **C. Cycle de Réalisation**
 
@@ -68,3 +69,9 @@ Les commandes sont regroupées sous le namespace `aurelius:`.
 *   **aurelius:hotfix**
     *   *Skill:* Developer (Senior)
     *   *Action:* Correction chirurgicale avec test de non-régression.
+
+## **4. Hygiène du Contexte et Autorisations**
+
+Pour maintenir une efficacité maximale, cette méthode recommande :
+1.  **Clear Context fréquent** : Nettoyer le contexte entre chaque changement de rôle (ex: après un `plan` et avant un `gen-tickets`).
+2.  **Auto-approval** : Configurer le CLI pour autoriser sans confirmation les outils de base (`ls`, `mkdir`, `mv`, `rm`, `touch`, `sed`, `grep`, `npm test`). Cela permet de conserver la fluidité malgré les resets de session.

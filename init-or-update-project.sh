@@ -57,6 +57,34 @@ init_file "templates/user-story-template.md" "backlog/template-us.md"
 if [ ! -f "$TARGET_DIR/specs/00-BRIEF.md" ]; then touch "$TARGET_DIR/specs/00-BRIEF.md"; fi
 if [ ! -f "$TARGET_DIR/specs/04-EPICS.md" ]; then touch "$TARGET_DIR/specs/04-EPICS.md"; fi
 
+# 5. Setup/Update .geminirc for workflow fluidity
+GEMINIRC="$TARGET_DIR/.geminirc"
+echo "Configuring .geminirc for tool auto-approval..."
+if [ ! -f "$GEMINIRC" ]; then
+    cat > "$GEMINIRC" <<EOF
+[tools]
+allow_list = [
+    "ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find",
+    "git status", "git diff", "npm test", "npm run lint"
+]
+EOF
+    echo "Created $GEMINIRC with recommended settings."
+else
+    if ! grep -q "allow_list" "$GEMINIRC"; then
+        cat >> "$GEMINIRC" <<EOF
+
+[tools]
+allow_list = [
+    "ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find",
+    "git status", "git diff", "npm test", "npm run lint"
+]
+EOF
+        echo "Appended recommended allow_list to $GEMINIRC."
+    else
+        echo "Skipping .geminirc update (allow_list already present)."
+    fi
+fi
+
 echo ""
 echo "Done! Project in $TARGET_DIR is now using Aurelius (SpecMethodDevLite)."
 echo "Next steps:"

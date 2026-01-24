@@ -1,0 +1,29 @@
+# Aurelius - Recommended Gemini CLI Configuration
+# This file suggests which tools to auto-approve to keep the workflow fluid.
+
+[tools]
+# List of tools that can run without manual confirmation
+# WARNING: Only include tools you trust in your environment.
+allow_list = [
+    "ls",
+    "mkdir",
+    "touch",
+    "mv",
+    "cp",
+    "rm",
+    "grep",
+    "sed",
+    "cat",
+    "find",
+    "git status",
+    "git diff",
+    "npm test",
+    "npm run lint"
+]
+
+[context]
+# Automatically clear context after these commands to keep it clean (Aurelius style)
+clear_after = [
+    "aurelius:finalize-ticket",
+    "aurelius:hotfix"
+]
