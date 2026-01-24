@@ -50,11 +50,13 @@ Tout projet utilisant la méthode Lite respectera cette structure :
 
 *Ces commandes sont implémentées en TOML pour Gemini CLI.*
 
-### **A. Phase d'Initialisation & Discovery**
+### **A. Phase d'Initialisation & Update**
 
-1.  **1-init**
-    *   *Skill:* Product Owner + Architect
-    *   *Action:* Crée l'arborescence de dossiers et génère les templates vierges dans `specs/` et `backlog/`.
+0.  **Installation/Update via Shell Script**
+    *   *Action:* Exécuter `./init-or-update-project.sh <target-dir>` depuis le repo Aurelius.
+    *   *Effet:* Synchronise les skills, commandes et templates dans le projet cible.
+
+1.  *(Supprimé - Remplacé par le script shell)*
 2.  **2-bootstrap-specs**
     *   *Skill:* Product Manager
     *   *Input:* Idée brute (Concept).
