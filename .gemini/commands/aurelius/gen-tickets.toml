@@ -16,10 +16,11 @@ Read Context:
 *   @{templates/user-story-template.md} (Use this format)
 
 Instructions:
-1.  **Analyze**: Focus ONLY on the Epic "{{args}}". If "{{args}}" is empty, pick the first 'BACKLOG' Epic from `specs/04-EPICS.md`.
+1.  **Analyze**: Focus ONLY on the Epic "{{args}}". If "{{args}}" is empty, pick the first 'BACKLOG' Epic from `specs/04-EPICS.md`. work only one Epic at a time.
 2.  **Extract Rules**: Identify all functional requirements and business rules in the PRD related to this Epic.
 3.  **Create Tickets**: Generate User Story files in `backlog/TODO/`.
-    *   Naming: `US-{id}-{short-description}.md`.
+    *   Naming: `US-{EPIC_ID}-{id}-{short-description}.md` (e.g., `US-AUTH-001-login_form.md`).
+    *   **EPIC_ID**: Use a short, uppercase slug derived from the Epic name (e.g., "Authentication" -> "AUTH").
     *   **Acceptance Criteria**: Ensure they are testable (Scenario: Given/When/Then).
 4.  **Update Epic Status**: Remind the user to mark this Epic as 'IN_PROGRESS' or 'DONE' (stories generated) in `specs/04-EPICS.md`.
 

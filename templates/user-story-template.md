@@ -1,5 +1,5 @@
 ---
-id: US-XXX
+id: US-EPIC-XXX
 title: [Short Title]
 status: READY
 type: feature | bugfix

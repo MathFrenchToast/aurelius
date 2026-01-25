@@ -8,7 +8,7 @@ Your task is to perform the technical grooming of this User Story.
 
 1.  **Locate & Read**: 
     *   If `{{args}}` is a path, read it. 
-    *   If `{{args}}` is just an ID (e.g., "US-001"), find the matching file in `backlog/TODO/` first.
+    *   If `{{args}}` is just an ID (e.g., "US-AUTH-001"), find the matching file in `backlog/TODO/` first.
 2.  **Context**:
     *   Read @{specs/03-ARCHITECTURE.md}
     *   Read @{specs/context-map.md}
