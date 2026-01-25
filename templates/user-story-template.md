@@ -1,7 +1,7 @@
 ---
-id: US-EPIC-XXX
+id: US-XX-ID-XXX
 title: [Short Title]
-status: READY
+status: READY | REWORK
 type: feature | bugfix
 ---
 # Description
@@ -29,3 +29,6 @@ Include Success, Error, and Edge cases.
 
 # Technical Notes (Architect)
 <!-- Implementation details, constraints, specific libraries to use -->
+
+# Reviewer Feedback (Reviewer)
+<!-- If status is REWORK, details on what failed (AT or Code Quality) -->

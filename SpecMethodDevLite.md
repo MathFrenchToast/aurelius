@@ -23,40 +23,28 @@ Cette méthode est une adaptation simplifiée de BMAD (**Build More, Architect D
 │   ├── 02-UX-DESIGN.md     # Design textuel et flux écrans
 │   ├── 03-ARCHITECTURE.md  # Patterns, Standards (KISS, Clean Code)
 │   └── 04-EPICS.md         # Roadmap des grandes fonctionnalités
-├── backlog/                # TODO, WIP, DONE
+├── backlog/                # TODO (Ready for Dev), WIP (In Progress/Review), DONE
 └── templates/              # Squelettes pour l'initialisation
 
 ## **3. Les Rôles (Skills)**
-
-*   **Product Manager :** Discovery, bootstrapping des specs et de l'architecture initiale.
-*   **Product Owner :** Découpage des Epics en User Stories (INVEST) avec critères d'acceptation testables (Given/When/Then).
-*   **Architecte :** Gardien de la cohérence technique, de la `context-map.md` et du grooming des tickets. Détecte l'impact UI.
-*   **Designer UX :** Définit les parcours et l'interface de manière textuelle.
-*   **Developer :** Implémente via TDD. Applique KISS et Clean Code. Gère le passage en `WIP`.
-*   **Reviewer :** Vérifie la qualité, la modernité et archive vers `DONE`.
+...
+*   **Reviewer :** Vérifie la qualité, la modernité et archive vers `DONE`. En cas d'échec, passe le ticket en `REWORK` avec feedback détaillé.
 
 ## **4. Workflows (Namespace `aurelius:`)**
-
-### **A. Initialisation**
-*   **Setup :** `./init-or-update-project.sh <target>` (Installe les dossiers, les skills et les policies).
-*   **aurelius:bootstrap-specs :** Initialise tous les documents de `specs/` à partir d'une idée.
-
-### **B. Planification & Design**
-*   **aurelius:design :** (Optionnel) Définit l'UX globale ou spécifique à un ticket.
-*   **aurelius:plan :** Point d'entrée unique pour toute modification (Feature, Refacto, Infra). Met à jour les specs et crée les Epics.
-*   **aurelius:gen-tickets :** Découpe un Epic spécifique en User Stories dans `backlog/TODO/`.
-*   **aurelius:groom-ticket :** Prépare un ticket (Notes techniques + Context Map) et le passe à `READY`.
-
+...
 ### **C. Réalisation & Qualité**
 *   **aurelius:dev-ticket :** Implémente (TDD). Déplace vers `WIP`. **Interdiction de déplacer vers DONE.**
-*   **aurelius:finalize-ticket :** Review technique, Commit conventionnel et archivage vers `DONE`.
-*   **aurelius:hotfix :** Correction urgente, bypass les specs mais respecte l'architecture.
+*   **aurelius:finalize-ticket :** Review technique et Commit.
+    *   **Succès :** Passage en `DONE` et archivage.
+    *   **Échec :** Passage en `REWORK`, ajout des notes de review en fin de fichier US. Le ticket reste dans `WIP`.
+*   **aurelius:hotfix :** Correction urgente...
 
 ### **D. Modes de fonctionnement**
-*   **Mode Interactif (Par défaut) :** L'agent pose des questions en cas d'ambiguïté.
-*   **Mode Auto :** En ajoutant `auto` dans les arguments, l'agent prend des décisions basées sur les meilleures pratiques et liste ses hypothèses.
+...
 
-## **5. Hygiène et Performance**
-
-1.  **Clear Context :** Recommandé entre chaque changement de rôle pour éviter la pollution de mémoire.
-2.  **Policies d'Approbation :** Utilisation de `.gemini/policies/aurelius-tools.toml` pour autoriser automatiquement les outils de base (`ls`, `mv`, `mkdir`, `npm test`, etc.) et maintenir la fluidité malgré les resets de contexte.
+## **6. Cycle de Vie d'un Ticket (Status)**
+*   **TODO :** Dans le backlog, en attente.
+*   **READY :** Groomé par l'Architecte, prêt pour le Dev.
+*   **IN_PROGRESS :** En cours de développement (dans `WIP/`).
+*   **REWORK :** Échec de review. Le développeur doit corriger les critères d'acceptation (AT) ou la qualité avant une nouvelle review.
+*   **DONE :** Validé et archivé.

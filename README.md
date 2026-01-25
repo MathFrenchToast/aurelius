@@ -58,8 +58,8 @@ graph TD
 3.  **Design (Optional):** `gemini aurelius:design "global auto"`
 4.  **Plan:** `gemini aurelius:plan "Your request auto"`
 5.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
-6.  **Grooming:** `gemini aurelius:groom-ticket US-EPIC-xxx`
-7.  **Dev:** `gemini aurelius:dev-ticket US-EPIC-xxx`
+6.  **Grooming:** `gemini aurelius:groom-ticket US-01-EPIC-001`
+7.  **Dev:** `gemini aurelius:dev-ticket US-01-EPIC-001`
 8.  **Finalize:** `gemini aurelius:finalize-ticket`
 
 See `SpecMethodDevLite.md` for the full technical documentation.
