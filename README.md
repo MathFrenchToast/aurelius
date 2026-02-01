@@ -11,7 +11,7 @@ To initialize a new project or update the methodology in an existing one:
 2.  **Run the initializer** pointing to your target project directory:
 
 ```bash
-./init-or-update-project.sh ../path-to-my-project
+./init-or-update-project.sh {path-to-my-project}
 ```
 
 This script will:
@@ -30,7 +30,7 @@ The **Product Manager** and **Product Owner** roles support two modes of operati
     *   It will list its assumptions at the start of the output.
 
 **Example:**
-`gemini aurelius:gen-tickets "Auth System auto"`
+`gemini aurelius:gen-tickets "Epic "Auth System" auto"`
 
 ## Self-Guided Workflow
 

@@ -1,50 +1,55 @@
-# **Spécification Technique : Méthode de Développement IA "Lite" (Aurelius)**
+# **Technical Specification: "Lite" AI Development Method (Aurelius)**
 
-## **1. Vision et Philosophie**
+## **1. Vision and Philosophy**
 
-Cette méthode est une adaptation simplifiée de BMAD (**Build More, Architect Dreams**), conçue pour être **agnostique** (Gemini CLI / Claude Code) et **native**. Elle repose sur trois piliers :
+This method is a simplified adaptation of BMAD (**Build More, Architect Dreams**), designed to be **agnostic** (Gemini CLI / Claude Code) and **native**. It is based on three pillars:
 
-1.  **Kanban-as-Code :** L'état du projet est dicté par des fichiers Markdown dans `backlog/`.
-2.  **Contextes Segmentés :** Séparation entre Vision (`productContext.md`), Carte Technique (`context-map.md`) et Spécifications (`PRD`, `Architecture`).
-3.  **Minimalisme (KISS) :** Priorité à la solution la plus simple. Refus catégorique du sur-engineering et de l'optimisation prématurée.
+1.  **Kanban-as-Code:** The project state is dictated by Markdown files in `backlog/`.
+2.  **Segmented Contexts:** Separation between Vision (`productContext.md`), Technical Map (`context-map.md`), and Specifications (`PRD`, `Architecture`).
+3.  **Minimalism (KISS):** Priority to the simplest solution. Categorical refusal of over-engineering and premature optimization.
 
-## **2. Architecture du Projet (File System)**
+## **2. Project Architecture (File System)**
 
+``` 
 .
 ├── .gemini/
 │   ├── commands/aurelius/  # Workflows (bootstrap, plan, dev, finalize...)
 │   ├── skills/             # Personas (pm, po, arch, dev, reviewer, designer)
-│   └── policies/           # Auto-approbation des outils (Policies TOML)
-├── specs/                  # La Vérité (Documentation vivante)
-│   ├── productContext.md   # Vision haute et Tech Stack (System Prompt)
-│   ├── context-map.md      # Index technique (Feature -> Fichiers)
-│   ├── 00-BRIEF.md         # Objectifs et cibles
-│   ├── 01-PRD.md           # Règles métier
-│   ├── 02-UX-DESIGN.md     # Design textuel et flux écrans
+│   └── policies/           # Tool auto-approval (TOML Policies)
+├── specs/                  # The Truth (Living Documentation)
+│   ├── productContext.md   # High-level Vision and Tech Stack (System Prompt)
+│   ├── context-map.md      # Technical Index (Feature -> Files)
+│   ├── 00-BRIEF.md         # Objectives and targets
+│   ├── 01-PRD.md           # Business rules
+│   ├── 02-UX-DESIGN.md     # Textual design and screen flows
 │   ├── 03-ARCHITECTURE.md  # Patterns, Standards (KISS, Clean Code)
-│   └── 04-EPICS.md         # Roadmap des grandes fonctionnalités
-├── backlog/                # TODO (Ready for Dev), WIP (In Progress/Review), DONE
-└── templates/              # Squelettes pour l'initialisation
+│   └── 04-EPICS.md         # Roadmap of major features
+├── backlog/
+│   ├── TODO                # TODO (Ready for grooming or Dev)
+│   ├── WIP                 # In Progress or to be Reviewed
+│   └── DONE                # Completed US
+└── templates/              # Skeletons for initialization
+```
 
-## **3. Les Rôles (Skills)**
+## **3. Roles (Skills)**
 ...
-*   **Reviewer :** Vérifie la qualité, la modernité et archive vers `DONE`. En cas d'échec, passe le ticket en `REWORK` avec feedback détaillé.
+*   **Reviewer:** Checks quality, modernity, and archives to `DONE`. In case of failure, moves the ticket to `REWORK` with detailed feedback.
 
 ## **4. Workflows (Namespace `aurelius:`)**
 ...
-### **C. Réalisation & Qualité**
-*   **aurelius:dev-ticket :** Implémente (TDD). Déplace vers `WIP`. **Interdiction de déplacer vers DONE.**
-*   **aurelius:finalize-ticket :** Review technique et Commit.
-    *   **Succès :** Passage en `DONE` et archivage.
-    *   **Échec :** Passage en `REWORK`, ajout des notes de review en fin de fichier US. Le ticket reste dans `WIP`.
-*   **aurelius:hotfix :** Correction urgente...
+### **C. Implementation & Quality**
+*   **aurelius:dev-ticket:** Implements (TDD). Moves to `WIP`. **Forbidden to move to DONE.**
+*   **aurelius:finalize-ticket:** Technical review and Commit.
+    *   **Success:** Move to `DONE` and archiving.
+    *   **Failure:** Move to `REWORK`, adding review notes at the end of the US file. The ticket remains in `WIP`.
+*   **aurelius:hotfix:** Urgent fix...
 
-### **D. Modes de fonctionnement**
+### **D. Operating Modes**
 ...
 
-## **6. Cycle de Vie d'un Ticket (Status)**
-*   **TODO :** Dans le backlog, en attente.
-*   **READY :** Groomé par l'Architecte, prêt pour le Dev.
-*   **IN_PROGRESS :** En cours de développement (dans `WIP/`).
-*   **REWORK :** Échec de review. Le développeur doit corriger les critères d'acceptation (AT) ou la qualité avant une nouvelle review.
-*   **DONE :** Validé et archivé.
+## **6. Ticket Lifecycle (Statuses)**
+*   **TODO:** In the backlog, waiting.
+*   **READY:** Groomed by the Architect, ready for Dev.
+*   **IN_PROGRESS:** Currently under development (in `WIP/`).
+*   **REWORK:** Review failure. The developer must fix the acceptance criteria (AC) or quality before a new review.
+*   **DONE:** Validated and archived.
