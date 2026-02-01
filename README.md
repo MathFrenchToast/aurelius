@@ -68,6 +68,9 @@ if lost:
 /aurelius:plan "Explain where we are in this project"   
 
 
+To update your fork, I suggest 
+/aurelius:plan "So far I have used a methods for development (named aurelius: https://github.com/MathFrenchToast/aurelius). It works pretty well, but some hotfix have been needed along the way, indicating that it is not error prone.  by looking at the hotfix in the @backlog/ needed so far, comparing to the actual EPICS, US and other docs in @specs/, I would like a report on what is to be perfected in our development methods contained in @.gemini/commands/ and @.gemini/skills/ do not update the files, first analyse and create a report"  
+
 
 ## references
 - [gemini cli custom commands](https://geminicli.com/docs/cli/custom-commands/)
