@@ -3,7 +3,7 @@
 
 [[rule]]
 toolName = ["shell", "Shell", "local_shell", "run_shell_command"]
-commandPrefix = ["ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find", "git status", "git diff", "git log", "git show", "git checkout", "npm test", "npm run lint"]
+commandPrefix = ["ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find", "git status", "git diff", "git log", "git show", "git checkout", "npm test", "npm run lint", "npx"]
 decision = "allow"
 priority = 999
 
