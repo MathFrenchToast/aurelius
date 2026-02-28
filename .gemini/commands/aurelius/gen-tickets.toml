@@ -17,7 +17,7 @@ Read Context:
 
 Instructions:
 1.  **Analyze**: Focus ONLY on the Epic "{{args}}". If "{{args}}" is empty, pick the first 'BACKLOG' Epic from `specs/04-EPICS.md`. work only one Epic at a time.
-2.  **Extract Rules**: Identify all functional requirements and business rules in the PRD related to this Epic.
+2.  **Extract Rules**: Identify all functional requirements,  business rules and UI elements in the PRD related to this Epic. 
 3.  **Create Tickets**: Generate User Story files in `backlog/TODO/`.
     *   Naming: `US-{EPIC_NUM}-{EPIC_ID}-{US_NUM}-{short-description}.md`.
     *   **EPIC_NUM**: The 2-digit number of the Epic from `specs/04-EPICS.md` (e.g., `01`, `02`).

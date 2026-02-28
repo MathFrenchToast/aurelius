@@ -5,6 +5,7 @@ prompt = """
 User Request: {{args}}
 
 Your task is to evaluate this request and update the project specifications.
+@{.gemini/commands/aurelius/specific/plan.md}
 
 1.  **Analyze**: 
     *   Read @{specs/productContext.md}, @{specs/03-ARCHITECTURE.md} and @{specs/context-map.md}.

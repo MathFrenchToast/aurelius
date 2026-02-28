@@ -15,6 +15,7 @@ Your task is to perform the technical grooming of this User Story.
     *   Read @{specs/02-UX-DESIGN.md} (to ensure UI alignment)
 3.  **Update**:
     *   Add technical notes and specific context map to the ticket.
+    *   If the ticket is about a UI add the UI part in the ticket 
     *   Set status to `READY`.
 
 Output a confirmation once updated.

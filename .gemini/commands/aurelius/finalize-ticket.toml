@@ -3,6 +3,7 @@ prompt = """
 @{.gemini/skills/reviewer.md}
 
 Your task is to review the work done for the active ticket in `backlog/WIP/`.
+@{.gemini/commands/aurelius/specific/finalize-ticket.md}
 
 1.  **Identify**: Find the active ticket in `backlog/WIP/`.
 2.  **Analyze**: Read the ticket and the modified files (use `git diff`).

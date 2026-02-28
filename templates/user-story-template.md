@@ -27,6 +27,9 @@ Include Success, Error, and Edge cases.
     - When [Bad Action]
     - Then [Error Message]
 
+# UI element
+<!-- for User stories including new or updated UI elemet, add UI description >
+
 # Technical Notes (Architect)
 <!-- Implementation details, constraints, specific libraries to use -->
 

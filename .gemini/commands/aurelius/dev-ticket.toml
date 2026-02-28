@@ -5,6 +5,7 @@ prompt = """
 Ticket (Path or ID): {{args}}
 
 Your task is to implement this User Story.
+@{.gemini/commands/aurelius/specific/dev-ticket.md}
 
 1.  **Locate & Analyze**:
     *   Find and read the ticket (search in `backlog/TODO/` if only an ID is provided).
