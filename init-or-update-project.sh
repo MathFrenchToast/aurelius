@@ -31,9 +31,6 @@ echo "Updating configuration, skills, policies and settings..."
 cp -rf "$SOURCE_DIR/.gemini/skills/"* "$TARGET_DIR/.gemini/skills/"
 cp -rf "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/"
 cp -rf "$SOURCE_DIR/.gemini/policies/"* "$TARGET_DIR/.gemini/policies/"
-if [ -f "$SOURCE_DIR/.gemini/settings.json" ]; then
-    cp -f "$SOURCE_DIR/.gemini/settings.json" "$TARGET_DIR/.gemini/settings.json"
-fi
 cp -rf "$SOURCE_DIR/templates/"* "$TARGET_DIR/templates/"
 
 # 3. Bootstrap Specs (Copy only if not existing)
@@ -51,6 +48,7 @@ init_file() {
     fi
 }
 
+init_file ".gemini/settings.json" ".gemini/settings.json"
 init_file "templates/product-context-template.md" "specs/productContext.md"
 init_file "templates/context-map-template.md" "specs/context-map.md"
 init_file "templates/prd-template.md" "specs/01-PRD.md"
