@@ -17,14 +17,15 @@ try {
   const input = JSON.parse(inputData);
   const response = input.prompt_response || "";
 
-  // Line-by-line parsing to avoid multi-line capture issues
-  const lines = response.split(/\r?\n/);
+  // Split into lines and only look at the last 10 lines to find the footer
+  const allLines = response.split(/\r?\n/);
+  const footerLines = allLines.slice(-10);
   
   let summary = "N/A";
   let nextStep = "NONE";
   let found = false;
 
-  for (const line of lines) {
+  for (const line of footerLines) {
     const trimmed = line.trim();
     if (trimmed.toUpperCase().startsWith("[SUMMARY]:")) {
       summary = trimmed.substring(10).trim();
