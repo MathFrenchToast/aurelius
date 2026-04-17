@@ -111,6 +111,17 @@ By default, Aurelius agents prioritize alignment over assumptions. If a requirem
 *   **REWORK:** Review failure. The developer must fix the acceptance criteria (AC) or quality before a new review.
 *   **DONE:** Validated and archived.
 
-## 9. References
+## 9. Workflow Automation (Interoperability)
+
+Every Aurelius agent response ends with a standardized footer to facilitate integration with external tools (scripts, CI/CD, workflow orchestrators).
+
+```text
+[SUMMARY]: <Short description of the work performed>
+[NEXT_STEP]: <The recommended aurelius:command to continue the workflow>
+```
+
+When calling Gemini CLI with the `--json` flag, these markers can be easily parsed from the `content` field using regex to automate the next action.
+
+## 10. References
 - [gemini cli custom commands](https://geminicli.com/docs/cli/custom-commands/)
 - [gemini cli settings](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/settings.md)
