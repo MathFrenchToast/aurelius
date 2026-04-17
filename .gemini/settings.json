@@ -23,18 +23,6 @@
     "defaultApprovalMode": "auto_edit"
   },
   "hooks": {
-    "AfterTool": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "name": "log-action",
-            "type": "command",
-            "command": "node .gemini/hooks/log-action.cjs"
-          }
-        ]
-      }
-    ],
     "AfterAgent": [
       {
         "matcher": "*",

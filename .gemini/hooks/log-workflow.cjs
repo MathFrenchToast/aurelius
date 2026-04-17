@@ -17,17 +17,28 @@ try {
   const input = JSON.parse(inputData);
   const response = input.prompt_response || "";
 
-  // Extract markers using Regex
-  const summaryMatch = response.match(/\[SUMMARY\]:\s*(.*)/i);
-  const nextStepMatch = response.match(/\[NEXT_STEP\]:\s*(.*)/i);
+  // Line-by-line parsing to avoid multi-line capture issues
+  const lines = response.split(/\r?\n/);
+  
+  let summary = "N/A";
+  let nextStep = "NONE";
+  let found = false;
 
-  if (!summaryMatch && !nextStepMatch) {
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.toUpperCase().startsWith("[SUMMARY]:")) {
+      summary = trimmed.substring(10).trim();
+      found = true;
+    } else if (trimmed.toUpperCase().startsWith("[NEXT_STEP]:")) {
+      nextStep = trimmed.substring(12).trim();
+      found = true;
+    }
+  }
+
+  if (!found) {
     console.log(JSON.stringify({}));
     process.exit(0);
   }
-
-  const summary = summaryMatch ? summaryMatch[1].trim() : "N/A";
-  const nextStep = nextStepMatch ? nextStepMatch[1].trim() : "NONE";
   
   const logLine = `[${getTimestamp()}] SUMMARY: ${summary}\n[${getTimestamp()}] NEXT_STEP: ${nextStep}\n---\n`;
   
