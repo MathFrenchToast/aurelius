@@ -20,17 +20,21 @@ mkdir -p "$TARGET_DIR/.gemini"
 mkdir -p "$TARGET_DIR/.gemini/skills"
 mkdir -p "$TARGET_DIR/.gemini/commands/aurelius"
 mkdir -p "$TARGET_DIR/.gemini/policies"
+mkdir -p "$TARGET_DIR/.gemini/hooks"
+mkdir -p "$TARGET_DIR/devlog"
 mkdir -p "$TARGET_DIR/templates"
 mkdir -p "$TARGET_DIR/specs/diagrams"
 mkdir -p "$TARGET_DIR/backlog/TODO"
 mkdir -p "$TARGET_DIR/backlog/WIP"
 mkdir -p "$TARGET_DIR/backlog/DONE"
 
-# 2. Update Config, Skills, Policies & Settings (Force Overwrite)
-echo "Updating configuration, skills, policies and settings..."
+# 2. Update Config, Skills, Policies, Hooks & Settings (Force Overwrite)
+echo "Updating configuration, skills, policies, hooks and settings..."
 cp -rf "$SOURCE_DIR/.gemini/skills/"* "$TARGET_DIR/.gemini/skills/"
 cp -rf "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/"
 cp -rf "$SOURCE_DIR/.gemini/policies/"* "$TARGET_DIR/.gemini/policies/"
+cp -rf "$SOURCE_DIR/.gemini/hooks/"* "$TARGET_DIR/.gemini/hooks/"
+cp -f "$SOURCE_DIR/.gemini/settings.json" "$TARGET_DIR/.gemini/settings.json"
 cp -rf "$SOURCE_DIR/templates/"* "$TARGET_DIR/templates/"
 
 # 3. Bootstrap Specs (Copy only if not existing)
@@ -48,7 +52,6 @@ init_file() {
     fi
 }
 
-init_file ".gemini/settings.json" ".gemini/settings.json"
 init_file "templates/product-context-template.md" "specs/productContext.md"
 init_file "templates/context-map-template.md" "specs/context-map.md"
 init_file "templates/prd-template.md" "specs/01-PRD.md"

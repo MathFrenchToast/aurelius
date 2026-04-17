@@ -9,7 +9,10 @@ function getTimestamp() {
 
 try {
   const inputData = fs.readFileSync(0, 'utf-8');
-  if (!inputData) process.exit(0);
+  if (!inputData) {
+    console.log(JSON.stringify({}));
+    process.exit(0);
+  }
   
   const input = JSON.parse(inputData);
   const response = input.prompt_response || "";
@@ -19,6 +22,7 @@ try {
   const nextStepMatch = response.match(/\[NEXT_STEP\]:\s*(.*)/i);
 
   if (!summaryMatch && !nextStepMatch) {
+    console.log(JSON.stringify({}));
     process.exit(0);
   }
 
@@ -36,5 +40,6 @@ try {
 
   console.log(JSON.stringify({}));
 } catch (e) {
+  console.log(JSON.stringify({}));
   process.exit(0);
 }

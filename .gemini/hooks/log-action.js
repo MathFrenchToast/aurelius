@@ -9,12 +9,18 @@ function getTimestamp() {
 
 try {
   const inputData = fs.readFileSync(0, 'utf-8');
-  if (!inputData) process.exit(0);
+  if (!inputData) {
+    console.log(JSON.stringify({}));
+    process.exit(0);
+  }
   
   const input = JSON.parse(inputData);
   const toolName = input.tool_name;
 
-  if (!toolName) process.exit(0);
+  if (!toolName) {
+    console.log(JSON.stringify({}));
+    process.exit(0);
+  }
 
   const agentName = "aurelius"; 
   const logLine = `[${getTimestamp()}] [${agentName}] Action: ${toolName}\n`;
@@ -28,5 +34,6 @@ try {
 
   console.log(JSON.stringify({}));
 } catch (e) {
+  console.log(JSON.stringify({}));
   process.exit(0);
 }
