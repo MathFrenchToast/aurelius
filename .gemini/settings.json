@@ -1,7 +1,6 @@
 {
   "tools": {
-    "autoAccept": true,
-    "approvalMode": "auto_edit"
+    "autoAccept": true
   },
   "security": {
     "enablePermanentToolApproval": true
@@ -19,6 +18,8 @@
         "--no-usage-statistics"
       ]
     }
+  },
+  "general": {
+    "defaultApprovalMode": "auto_edit"
   }
-
 }

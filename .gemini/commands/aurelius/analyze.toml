@@ -1,11 +1,11 @@
-description = "Plan any change (Feature, Refactor, Infra, etc.) - The Architect's entry point"
+description = "Analyze any change (Feature, Refactor, Infra, etc.) - The Architect's entry point"
 prompt = """
 @{.gemini/skills/architect.md}
 
 User Request: {{args}}
 
 Your task is to evaluate this request and update the project specifications.
-@{.gemini/commands/aurelius/specific/plan.md}
+@{.gemini/commands/aurelius/specific/analyze.md}
 
 1.  **Analyze**: 
     *   Read @{specs/productContext.md}, @{specs/03-ARCHITECTURE.md} and @{specs/context-map.md}.
@@ -17,9 +17,8 @@ Your task is to evaluate this request and update the project specifications.
     *   **Evolution**: Update `specs/04-EPICS.md` to reflect the new work required (add an Epic if needed).
 3.  **Reflect**:
     *   If the request is ambiguous, ask the user for clarification.
-    *   If "auto" is present, make the best technical decision and proceed.
 
 **Constraint:** DO NOT write any implementation code or create individual User Story tickets yet. Just update the specifications and Epics.
 
-Output a summary of the plan and the files updated.
+Output a summary of the analysis and the files updated.
 """

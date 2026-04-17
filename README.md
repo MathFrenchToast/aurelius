@@ -32,7 +32,7 @@ This script will:
 ``` 
 .
 ├── .gemini/
-│   ├── commands/aurelius/  # Workflows (bootstrap, plan, dev, finalize...)
+│   ├── commands/aurelius/  # Workflows (bootstrap, analyze, dev, finalize...)
 │   ├── skills/             # Personas (pm, po, arch, dev, reviewer, designer)
 │   └── policies/           # Tool auto-approval (TOML Policies)
 ├── specs/                  # The Truth (Living Documentation)
@@ -66,27 +66,27 @@ Aurelius agents are "workflow-aware". At the end of each task, the agent will re
 ```mermaid
 graph TD
     User([User Idea]) --> PM[aurelius:bootstrap-specs]
-    PM -->|Recommend| Arch_Plan[aurelius:plan]
+    PM -->|Recommend| Arch_Analyze[aurelius:analyze]
     PM -->|Recommend| UX[aurelius:design]
-    Arch_Plan -->|Recommend| PO[aurelius:gen-tickets]
+    Arch_Analyze -->|Recommend| PO[aurelius:gen-tickets]
     UX -->|Recommend| PO
     PO -->|Recommend| Arch_Groom[aurelius:groom-ticket]
     Arch_Groom -->|Status: READY| Dev[aurelius:dev-ticket]
     Dev -->|Status: WIP| Rev[aurelius:finalize-ticket]
     Rev -->|Status: DONE| Next{Backlog empty?}
     Next -->|No| Arch_Groom
-    Next -->|Yes| Arch_Plan
+    Next -->|Yes| Arch_Analyze
 ```
 
 ## 6. Detailed Workflows (Namespace `aurelius:`)
 
-1.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description auto"`
+1.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description"`
     *   Initializes project specs (`00-BRIEF`, `01-PRD`, `03-ARCHITECTURE`) from a raw idea.
-2.  **Plan:** `gemini aurelius:plan "Your request auto"`
+2.  **Analyze:** `gemini aurelius:analyze "Your request"`
     *   Analyzes the current state and recommends the next strategic move (Design, Tickets, or Code).
-3.  **Design (Optional):** `gemini aurelius:design "global auto"`
+3.  **Design (Optional):** `gemini aurelius:design "global"`
     *   Generates text-based UX/UI flows in `specs/02-UX-DESIGN.md`.
-4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name auto"`
+4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name"`
     *   Generates User Stories in `backlog/TODO/` based on the PRD and Epics.
 5.  **Grooming:** `gemini aurelius:groom-ticket US-01-EPIC-001`
     *   Architect adds technical notes and checks feasibility. Moves ticket to `READY`.
@@ -99,17 +99,9 @@ graph TD
 8.  **Hotfix:** `gemini aurelius:hotfix "Critical bug description"`
     *   Urgent correction workflow bypassing standard grooming if necessary.
 
-## 7. Operating Modes (Interactive vs. Auto)
+## 7. Interactive Alignment
 
-The **Product Manager** and **Product Owner** roles support two modes of operation:
-
-*   **Interactive Mode (Default):** The agent will pause and ask for clarification if a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible. This ensures 100% alignment with your vision.
-*   **Auto Mode:** By adding the keyword `auto` anywhere in your command arguments, you signal the agent to proceed autonomously.
-    *   It will make logical assumptions based on industry best practices.
-    *   It will fill in missing details (validation rules, error states) without interrupting.
-    *   It will list its assumptions at the start of the output.
-
-**Example:** `gemini aurelius:gen-tickets "Epic 'Auth System' auto"`
+By default, Aurelius agents prioritize alignment over assumptions. If a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible, the agent will list its questions and wait for your input. This ensures the generated specifications and code remain 100% aligned with your vision.
 
 ## 8. Ticket Lifecycle (Statuses)
 
