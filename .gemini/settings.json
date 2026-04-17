@@ -30,7 +30,7 @@
           {
             "name": "log-action",
             "type": "command",
-            "command": "node .gemini/hooks/log-action.js"
+            "command": "node .gemini/hooks/log-action.cjs"
           }
         ]
       }
@@ -42,7 +42,7 @@
           {
             "name": "log-workflow",
             "type": "command",
-            "command": "node .gemini/hooks/log-workflow.js"
+            "command": "node .gemini/hooks/log-workflow.cjs"
           }
         ]
       }
