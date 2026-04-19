@@ -1,0 +1,232 @@
+{
+  "name": "Aurelius YOLO Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "issue_num",
+              "displayName": "Issue Number"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.issue_num ? 'export GEMINI_YOLO=true && gh issue view ' + $json.issue_num + ' --json title,body > issue.json && git checkout main && git pull && git checkout -b fix/issue-' + $json.issue_num : 'echo No issue provided' }}"
+      },
+      "id": "2",
+      "name": "Prepare Git & Issue",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "command": "={{ 'export GEMINI_YOLO=true && ' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num ? 'gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze issue: ' + $node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num + ' body: $(cat issue.json). Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"' : 'gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze Quelles sont les prochaines actions ? Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"') }}"
+      },
+      "id": "3",
+      "name": "Analyze Phase",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [450, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $input.first().json.stdout || '';\nconst lines = output.split('\\n');\nlet nextStep = 'NONE';\nfor (let i = lines.length - 1; i >= 0; i--) {\n  const match = lines[i].match(/\\[NEXT_STEP\\]:\\s*(.*)/);\n  if (match) {\n    nextStep = match[1].trim();\n    break;\n  }\n}\nreturn { json: { stdout: output, NEXT_STEP: nextStep } };"
+      },
+      "id": "4",
+      "name": "Extract NEXT_STEP",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.NEXT_STEP }}",
+              "operation": "notEqual",
+              "value2": "NONE"
+            }
+          ]
+        }
+      },
+      "id": "5",
+      "name": "Check if NONE",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [950, 0]
+    },
+    {
+      "parameters": {
+        "command": "={{ 'export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"' + ($json.NEXT_STEP.startsWith('aurelius:') ? '/' + $json.NEXT_STEP : $json.NEXT_STEP) + '. Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"' }}"
+      },
+      "id": "6",
+      "name": "Execute Next Step",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [950, -250]
+    },
+    {
+      "parameters": {
+        "command": "export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze D'après ce qui vient d'être fait, quelle est la toute prochaine action concrète à entreprendre ? Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE si vraiment tout est fini.\""
+      },
+      "id": "7",
+      "name": "Relance Analyseur",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1200, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $input.first().json.stdout || '';\nconst lines = output.split('\\n');\nlet nextStep = 'NONE';\nfor (let i = lines.length - 1; i >= 0; i--) {\n  const match = lines[i].match(/\\[NEXT_STEP\\]:\\s*(.*)/);\n  if (match) {\n    nextStep = match[1].trim();\n    break;\n  }\n}\nreturn { json: { stdout: output, NEXT_STEP: nextStep } };"
+      },
+      "id": "8",
+      "name": "Extract NEXT_STEP (Relance)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1450, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.NEXT_STEP }}",
+              "operation": "notEqual",
+              "value2": "NONE"
+            }
+          ]
+        }
+      },
+      "id": "9",
+      "name": "Final Check NONE",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1700, 200]
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Prepare Git & Issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Git & Issue": {
+      "main": [
+        [
+          {
+            "node": "Analyze Phase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Phase": {
+      "main": [
+        [
+          {
+            "node": "Extract NEXT_STEP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract NEXT_STEP": {
+      "main": [
+        [
+          {
+            "node": "Check if NONE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if NONE": {
+      "main": [
+        [
+          {
+            "node": "Execute Next Step",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Relance Analyseur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Next Step": {
+      "main": [
+        [
+          {
+            "node": "Extract NEXT_STEP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relance Analyseur": {
+      "main": [
+        [
+          {
+            "node": "Extract NEXT_STEP (Relance)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract NEXT_STEP (Relance)": {
+      "main": [
+        [
+          {
+            "node": "Final Check NONE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Check NONE": {
+      "main": [
+        [
+          {
+            "node": "Execute Next Step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "a7b3c4d5-e6f7-8a9b-0c1d-2e3f4a5b6c7d",
+  "meta": {
+    "instanceId": "default"
+  }
+}
