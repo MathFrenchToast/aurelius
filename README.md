@@ -99,6 +99,32 @@ graph TD
 8.  **Hotfix:** `gemini aurelius:hotfix "Critical bug description"`
     *   Urgent correction workflow bypassing standard grooming if necessary.
 
+### Command vs. Specs Mapping
+
+This table shows the interaction between Aurelius commands and the specification files in `specs/`.
+
+| Command | Skill | PC | CM | BR | PR | UX | AR | EP |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `bootstrap-specs` | Product Manager | ✏️ | | ✏️ | ✏️ | | ✏️ | ✏️ |
+| `analyze` | Architect | ✏️ | ✏️ | | ✏️ | | ✏️ | ✏️ |
+| `design` | Designer | 👁️ | | | 👁️ | ✏️ | | |
+| `gen-tickets` | Product Owner | | | | 👁️ | | | 👁️ |
+| `groom-ticket` | Architect | | 👁️ | | | 👁️ | 👁️ | |
+| `dev-ticket` | Developer | 👁️ | 👁️ | | | 👁️ | | |
+| `finalize-ticket` | Reviewer | | | | | | | |
+| `hotfix` | Developer | | 👁️ | | | | 👁️ | |
+
+**Legend:**
+*   **PC:** `productContext.md` (Vision & Tech Stack)
+*   **CM:** `context-map.md` (Technical Index)
+*   **BR:** `00-BRIEF.md` (Objectives)
+*   **PR:** `01-PRD.md` (Business Rules)
+*   **UX:** `02-UX-DESIGN.md` (Design Flows)
+*   **AR:** `03-ARCHITECTURE.md` (Standards)
+*   **EP:** `04-EPICS.md` (Roadmap)
+*   ✏️ : Create / Modify
+*   👁️ : Read / Consult
+
 ## 7. Interactive Alignment
 
 By default, Aurelius agents prioritize alignment over assumptions. If a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible, the agent will list its questions and wait for your input. This ensures the generated specifications and code remain 100% aligned with your vision.
