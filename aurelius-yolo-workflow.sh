@@ -79,10 +79,25 @@ unset GEMINI_MODEL
 NEXT_STEP=$(grep "\[NEXT_STEP\]:" last_run.tmp | tail -n 1 | cut -d':' -f2- | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
 while [[ -n "$NEXT_STEP" ]]; do
+    # Vérification de l'état de l'issue si ISSUE_NUM est présent
+    if [ -n "$ISSUE_NUM" ]; then
+        STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state)
+        if [[ "$STATE" == "CLOSED" ]]; then
+            log "L'issue #$ISSUE_NUM est fermée. Fin du workflow."
+            break
+        fi
+    fi
+
     if [[ "$NEXT_STEP" == "NONE" ]]; then
         log "Tâche terminée (NONE). Demande de relance à l'analyseur..."
-        # On demande une relance via analyze
-        execute_gemini "/aurelius:analyze D'après ce qui vient d'être fait, quelle est la toute prochaine action concrète à entreprendre ? Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE si vraiment tout est fini."
+        
+        PROMPT="/aurelius:analyze D'après ce qui vient d'être fait, quelle est la toute prochaine action concrète à entreprendre ?"
+        if [ -n "$ISSUE_NUM" ]; then
+            PROMPT="$PROMPT L'issue #$ISSUE_NUM est-elle terminée ? Si oui, réponds [NEXT_STEP]: NONE."
+        fi
+        PROMPT="$PROMPT Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE."
+
+        execute_gemini "$PROMPT"
         
         # On vérifie si l'analyseur confirme la fin
         NEXT_STEP=$(grep "\[NEXT_STEP\]:" last_run.tmp | tail -n 1 | cut -d':' -f2- | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')

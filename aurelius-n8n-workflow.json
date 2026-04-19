@@ -50,6 +50,26 @@
     },
     {
       "parameters": {
+        "command": "={{ 'issue_num=\"' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num || '') + '\"; if [ -n \"$issue_num\" ]; then gh issue view \"$issue_num\" --json state --jq .state; else echo \"OPEN\"; fi' }}"
+      },
+      "id": "10",
+      "name": "Get Issue Status",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [900, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const nextStepData = $node[\"Extract NEXT_STEP\"].json;\nconst issueStatus = $node[\"Get Issue Status\"].json.stdout?.trim();\n\nlet finalNextStep = nextStepData.NEXT_STEP;\nif (issueStatus === 'CLOSED') {\n  finalNextStep = 'NONE';\n}\n\nreturn { json: { ...nextStepData, NEXT_STEP: finalNextStep, issue_status: issueStatus } };"
+      },
+      "id": "11",
+      "name": "Finalize NEXT_STEP",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
         "conditions": {
           "string": [
             {
@@ -64,7 +84,7 @@
       "name": "Check if NONE",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [950, 0]
+      "position": [1300, 0]
     },
     {
       "parameters": {
@@ -74,17 +94,17 @@
       "name": "Execute Next Step",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [950, -250]
+      "position": [1300, -250]
     },
     {
       "parameters": {
-        "command": "export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze D'après ce qui vient d'être fait, quelle est la toute prochaine action concrète à entreprendre ? Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE si vraiment tout est fini.\""
+        "command": "={{ 'export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze D\\'après ce qui vient d\\'être fait, quelle est la toute prochaine action concrète à entreprendre ? ' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num ? 'L\\'issue #' + $node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num + ' est-elle terminée ? Si oui, réponds [NEXT_STEP]: NONE. ' : '') + 'Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE.\"' }}"
       },
       "id": "7",
       "name": "Relance Analyseur",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [1200, 200]
+      "position": [1550, 200]
     },
     {
       "parameters": {
@@ -94,7 +114,7 @@
       "name": "Extract NEXT_STEP (Relance)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1450, 200]
+      "position": [1800, 200]
     },
     {
       "parameters": {
@@ -112,7 +132,7 @@
       "name": "Final Check NONE",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [1700, 200]
+      "position": [2050, 200]
     }
   ],
   "connections": {
@@ -150,6 +170,28 @@
       ]
     },
     "Extract NEXT_STEP": {
+      "main": [
+        [
+          {
+            "node": "Get Issue Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Issue Status": {
+      "main": [
+        [
+          {
+            "node": "Finalize NEXT_STEP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize NEXT_STEP": {
       "main": [
         [
           {
