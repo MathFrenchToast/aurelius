@@ -5,13 +5,12 @@ export GEMINI_YOLO=true
 # export GEMINI_NON_INTERACTIVE=true # Désactivé pour favoriser le streaming
 DEFAULT_BRANCH="main"
 LOG_FILE="aurelius_yolo.log"
-TIMEOUT_LIMIT="0" # 0 for no timeout
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
 
-# --- Fonction d'exécution avec gestion Timeout & Resume ---
+# --- Fonction d'exécution avec gestion Resume ---
 execute_gemini() {
     local cmd="$1"
     local output="last_run.tmp"
@@ -27,19 +26,8 @@ execute_gemini() {
 
     log "Lancement : $cmd"
     
-    if [ "$TIMEOUT_LIMIT" = "0" ]; then
-        gemini --raw-output --accept-raw-output-risk --prompt "$cmd" 2>&1 | tee "$output"
-        status=${PIPESTATUS[0]}
-    else
-        timeout $TIMEOUT_LIMIT stdbuf -i0 -oL -eL gemini --raw-output --accept-raw-output-risk --prompt "$cmd" 2>&1 | tee "$output"
-        status=${PIPESTATUS[0]}
-
-        if [ $status -eq 124 ]; then
-            log "TIMEOUT atteint ($TIMEOUT_LIMIT). Reprise..."
-            gemini --raw-output --accept-raw-output-risk --resume "Le temps est écoulé, termine l'action en cours avec le marqueur [NEXT_STEP]." 2>&1 | tee "$output"
-            status=${PIPESTATUS[0]}
-        fi
-    fi
+    gemini --raw-output --accept-raw-output-risk --prompt "$cmd" 2>&1 | tee "$output"
+    status=${PIPESTATUS[0]}
 
     cat "$output" >> "$LOG_FILE"
     return $status
@@ -48,6 +36,13 @@ execute_gemini() {
 # 1. Préparation de l'environnement
 ISSUE_NUM=$1
 if [ -n "$ISSUE_NUM" ]; then
+    # Vérification initiale de l'état de l'issue
+    STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state)
+    if [[ "$STATE" == "CLOSED" ]]; then
+        log "L'issue #$ISSUE_NUM est déjà fermée. Fin du workflow."
+        exit 0
+    fi
+
     # Récupération des données de l'issue
     log "Récupération de l'issue #$ISSUE_NUM via GitHub CLI..."
     ISSUE_DATA=$(gh issue view "$ISSUE_NUM" --json title,body)

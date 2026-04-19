@@ -1,5 +1,5 @@
 {
-  "name": "Aurelius YOLO Workflow",
+  "name": "Aurelius YOLO Workflow (Simplified)",
   "nodes": [
     {
       "parameters": {
@@ -20,53 +20,23 @@
     },
     {
       "parameters": {
-        "command": "={{ $json.issue_num ? 'export GEMINI_YOLO=true && gh issue view ' + $json.issue_num + ' --json title,body > issue.json && git checkout main && git pull && git checkout -b fix/issue-' + $json.issue_num : 'echo No issue provided' }}"
+        "command": "={{ 'issue_num=\"' + ($json.issue_num || '') + '\"; export GEMINI_YOLO=true; if [ -n \"$issue_num\" ]; then STATE=$(gh issue view \"$issue_num\" --json state --jq .state); if [ \"$STATE\" = \"CLOSED\" ]; then echo \"[NEXT_STEP]: NONE (Issue already closed)\"; exit 0; fi; gh issue view \"$issue_num\" --json title,body > issue.json; git checkout main && git pull && (git checkout -b fix/issue-$issue_num || git checkout fix/issue-$issue_num); gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze issue: ' + $json.issue_num + ' body: $(cat issue.json). Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"; else git checkout main && git pull; gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze Quelles sont les prochaines actions ? Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"; fi' }}"
       },
       "id": "2",
-      "name": "Prepare Git & Issue",
+      "name": "Setup & First Analyze",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [200, 0]
-    },
-    {
-      "parameters": {
-        "command": "={{ 'export GEMINI_YOLO=true && ' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num ? 'gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze issue: ' + $node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num + ' body: $(cat issue.json). Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"' : 'gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze Quelles sont les prochaines actions ? Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"') }}"
-      },
-      "id": "3",
-      "name": "Analyze Phase",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [450, 0]
+      "position": [250, 0]
     },
     {
       "parameters": {
         "jsCode": "const output = $input.first().json.stdout || '';\nconst lines = output.split('\\n');\nlet nextStep = 'NONE';\nfor (let i = lines.length - 1; i >= 0; i--) {\n  const match = lines[i].match(/\\[NEXT_STEP\\]:\\s*(.*)/);\n  if (match) {\n    nextStep = match[1].trim();\n    break;\n  }\n}\nreturn { json: { stdout: output, NEXT_STEP: nextStep } };"
       },
-      "id": "4",
+      "id": "3",
       "name": "Extract NEXT_STEP",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [700, 0]
-    },
-    {
-      "parameters": {
-        "command": "={{ 'issue_num=\"' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num || '') + '\"; if [ -n \"$issue_num\" ]; then gh issue view \"$issue_num\" --json state --jq .state; else echo \"OPEN\"; fi' }}"
-      },
-      "id": "10",
-      "name": "Get Issue Status",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [900, 0]
-    },
-    {
-      "parameters": {
-        "jsCode": "const nextStepData = $node[\"Extract NEXT_STEP\"].json;\nconst issueStatus = $node[\"Get Issue Status\"].json.stdout?.trim();\n\nlet finalNextStep = nextStepData.NEXT_STEP;\nif (issueStatus === 'CLOSED') {\n  finalNextStep = 'NONE';\n}\n\nreturn { json: { ...nextStepData, NEXT_STEP: finalNextStep, issue_status: issueStatus } };"
-      },
-      "id": "11",
-      "name": "Finalize NEXT_STEP",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1100, 0]
+      "position": [500, 0]
     },
     {
       "parameters": {
@@ -80,41 +50,41 @@
           ]
         }
       },
-      "id": "5",
+      "id": "4",
       "name": "Check if NONE",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [1300, 0]
+      "position": [750, 0]
     },
     {
       "parameters": {
         "command": "={{ 'export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"' + ($json.NEXT_STEP.startsWith('aurelius:') ? '/' + $json.NEXT_STEP : $json.NEXT_STEP) + '. Termine IMPÉRATIVEMENT ta réponse par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE\"' }}"
       },
-      "id": "6",
+      "id": "5",
       "name": "Execute Next Step",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [1300, -250]
+      "position": [750, -200]
     },
     {
       "parameters": {
         "command": "={{ 'export GEMINI_YOLO=true && gemini --raw-output --accept-raw-output-risk --prompt \"/aurelius:analyze D\\'après ce qui vient d\\'être fait, quelle est la toute prochaine action concrète à entreprendre ? ' + ($node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num ? 'L\\'issue #' + $node[\"When clicking \\\"Execute Workflow\\\"\"].json.issue_num + ' est-elle terminée ? Si oui, réponds [NEXT_STEP]: NONE. ' : '') + 'Réponds impérativement par [NEXT_STEP]: <commande> ou [NEXT_STEP]: NONE.\"' }}"
       },
-      "id": "7",
+      "id": "6",
       "name": "Relance Analyseur",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [1550, 200]
+      "position": [1000, 150]
     },
     {
       "parameters": {
         "jsCode": "const output = $input.first().json.stdout || '';\nconst lines = output.split('\\n');\nlet nextStep = 'NONE';\nfor (let i = lines.length - 1; i >= 0; i--) {\n  const match = lines[i].match(/\\[NEXT_STEP\\]:\\s*(.*)/);\n  if (match) {\n    nextStep = match[1].trim();\n    break;\n  }\n}\nreturn { json: { stdout: output, NEXT_STEP: nextStep } };"
       },
-      "id": "8",
-      "name": "Extract NEXT_STEP (Relance)",
+      "id": "7",
+      "name": "Extract (Relance)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1800, 200]
+      "position": [1250, 150]
     },
     {
       "parameters": {
@@ -128,11 +98,11 @@
           ]
         }
       },
-      "id": "9",
-      "name": "Final Check NONE",
+      "id": "8",
+      "name": "Final Check",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [2050, 200]
+      "position": [1500, 150]
     }
   ],
   "connections": {
@@ -140,25 +110,14 @@
       "main": [
         [
           {
-            "node": "Prepare Git & Issue",
+            "node": "Setup & First Analyze",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Prepare Git & Issue": {
-      "main": [
-        [
-          {
-            "node": "Analyze Phase",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Analyze Phase": {
+    "Setup & First Analyze": {
       "main": [
         [
           {
@@ -170,28 +129,6 @@
       ]
     },
     "Extract NEXT_STEP": {
-      "main": [
-        [
-          {
-            "node": "Get Issue Status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Issue Status": {
-      "main": [
-        [
-          {
-            "node": "Finalize NEXT_STEP",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Finalize NEXT_STEP": {
       "main": [
         [
           {
@@ -235,25 +172,25 @@
       "main": [
         [
           {
-            "node": "Extract NEXT_STEP (Relance)",
+            "node": "Extract (Relance)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extract NEXT_STEP (Relance)": {
+    "Extract (Relance)": {
       "main": [
         [
           {
-            "node": "Final Check NONE",
+            "node": "Final Check",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Final Check NONE": {
+    "Final Check": {
       "main": [
         [
           {
@@ -264,11 +201,5 @@
         ]
       ]
     }
-  },
-  "active": false,
-  "settings": {},
-  "versionId": "a7b3c4d5-e6f7-8a9b-0c1d-2e3f4a5b6c7d",
-  "meta": {
-    "instanceId": "default"
   }
 }
