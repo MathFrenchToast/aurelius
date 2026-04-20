@@ -47,6 +47,7 @@ This script will:
 │   ├── TODO                # TODO (Ready for grooming or Dev)
 │   ├── WIP                 # In Progress or to be Reviewed
 │   └── DONE                # Completed US
+├── automate/               # Automation and isolation (Docker, VM, WSL, Scripts)
 └── templates/              # Skeletons for initialization
 ```
 
@@ -147,6 +148,14 @@ Every Aurelius agent response ends with a standardized footer to facilitate inte
 ```
 
 When calling Gemini CLI with the `--json` flag, these markers can be easily parsed from the `content` field using regex to automate the next action.
+
+Advanced automation scripts and isolation environments are available in the `/automate/` directory:
+
+- **`docker/`**: Full stack isolation using Docker Compose, providing dedicated containers for agents and n8n.
+- **`alternative-vm.md`**: Guide for setting up a dedicated Ubuntu VM (KVM) for maximum security and sandboxing.
+- **`alternative-wsl.md`**: Instructions for Windows users to deploy isolated environments using WSL 2 and cloud-init.
+- **`aurelius-n8n-workflow.json`**: Pre-configured n8n workflow for visual orchestration of the methodology.
+- **`aurelius-yolo-workflow.sh`**: A lightweight bash script for rapid, automated execution of the command sequence.
 
 ## 10. References
 - [gemini cli custom commands](https://geminicli.com/docs/cli/custom-commands/)
