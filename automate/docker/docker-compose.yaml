@@ -1,0 +1,26 @@
+services:
+  n8n:
+    build: ./n8n
+    container_name: n8n_automator
+    user: "${MY_UID}:${MY_GID}"
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+      - /var/run/docker.sock:/var/run/docker.sock # Pilotage de l'agent
+      - ./workspace:/home/node/workspace           # Lecture des résultats
+    environment:
+      - N8N_LOG_LEVEL=info
+    ports:
+      - "5678:5678"
+
+  coding-agent:
+    build: ./agent
+    container_name: ai_agent
+    user: "${MY_UID}:${MY_GID}"
+    working_dir: /workspace
+    volumes:
+      - ./workspace:/workspace
+      - ./agent_config:/home/agent/.config
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    command: sleep infinity
