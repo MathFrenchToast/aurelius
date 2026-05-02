@@ -20,6 +20,8 @@ Your task is to evaluate this request and update the project specifications.
 3.  **Reflect**:
     *   If the request is ambiguous, ask the user for clarification.
 
+@{.gemini/commands/aurelius/specific/analyze.md}
+
 **Constraint:** DO NOT write any implementation code or create individual User Story tickets yet. Just update the specifications and Epics.
 
 ## Yolo Mode & Autonomy
@@ -29,3 +31,4 @@ Your task is to evaluate this request and update the project specifications.
 
 You MUST Follow the **Universal Output Format** defined in your skills.
 [STATUS]: <SUCCESS | FAILURE>
+

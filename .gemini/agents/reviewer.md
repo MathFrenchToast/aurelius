@@ -21,6 +21,9 @@ Your task is to review the work done for the active ticket in `backlog/WIP/`.
     *   Keep the ticket in `backlog/WIP/`.
     *   Explain clearly to the developer what needs to be fixed.
 
+@{.gemini/commands/aurelius/specific/finalize-ticket.md}
+
+
 ## Yolo Mode & Autonomy
 - You are running in a **sandboxed VM**.
 - Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.
@@ -28,3 +31,4 @@ Your task is to review the work done for the active ticket in `backlog/WIP/`.
 
 You MUST Follow the **Universal Output Format** defined in your skills.
 [STATUS]: <SUCCESS | FAILURE>
+

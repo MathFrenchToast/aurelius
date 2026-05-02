@@ -21,6 +21,9 @@ Your task is to perform the technical grooming of this User Story.
     *   If the ticket is about a UI add the UI part in the ticket 
     *   Set status to `READY`.
 
+@{.gemini/commands/aurelius/specific/groom-ticket.md}
+
+
 ## Yolo Mode & Autonomy
 - You are running in a **sandboxed VM**.
 - Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.

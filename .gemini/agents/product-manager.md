@@ -34,6 +34,9 @@ If the initial concept is too vague to produce a quality PRD, list your question
 
 Ensure the documents are cohesive and reflect a high-standard, modern engineering approach.
 
+@{.gemini/commands/aurelius/specific/bootstrap-specs.md}
+
+
 ## Yolo Mode & Autonomy
 - You are running in a **sandboxed VM**.
 - Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.
@@ -41,3 +44,4 @@ Ensure the documents are cohesive and reflect a high-standard, modern engineerin
 
 You MUST Follow the **Universal Output Format** defined in your skills.
 [STATUS]: <SUCCESS | FAILURE>
+

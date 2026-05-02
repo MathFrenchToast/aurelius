@@ -17,9 +17,11 @@ echo "Target: $TARGET_DIR"
 
 # 1. Ensure Target Directories exist
 mkdir -p "$TARGET_DIR/.gemini"
+mkdir -p "$TARGET_DIR/.gemini/settings"
 mkdir -p "$TARGET_DIR/.gemini/skills"
 mkdir -p "$TARGET_DIR/.gemini/agents"
 mkdir -p "$TARGET_DIR/.gemini/commands/aurelius"
+mkdir -p "$TARGET_DIR/.gemini/commands/aurelius/specific"
 mkdir -p "$TARGET_DIR/.gemini/policies"
 mkdir -p "$TARGET_DIR/.gemini/hooks"
 mkdir -p "$TARGET_DIR/devlog"
@@ -33,14 +35,14 @@ mkdir -p "$TARGET_DIR/backlog/DONE"
 echo "Updating configuration, skills, agents, policies, hooks and settings..."
 cp -rf "$SOURCE_DIR/.gemini/skills/"* "$TARGET_DIR/.gemini/skills/"
 cp -rf "$SOURCE_DIR/.gemini/agents/"* "$TARGET_DIR/.gemini/agents/"
-cp -rf "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/"
-cp -rf "$SOURCE_DIR/.gemini/policies/"* "$TARGET_DIR/.gemini/policies/"
+# Update command files directly, skipping directories (like 'specific/') to preserve user customizations
+cp -f "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/" 2>/dev/null || true
 cp -rf "$SOURCE_DIR/.gemini/hooks/"* "$TARGET_DIR/.gemini/hooks/"
-cp -f "$SOURCE_DIR/.gemini/settings.json" "$TARGET_DIR/.gemini/settings.json"
 cp -rf "$SOURCE_DIR/templates/"* "$TARGET_DIR/templates/"
 
-# 3. Bootstrap Specs (Copy only if not existing)
-echo "Checking for initial specification files..."
+
+# 3. Bootstrap Specs & Local Instructions (Copy only if not existing)
+echo "Checking for initial specification and local instruction files..."
 
 # Function to copy template if file doesn't exist
 init_file() {
@@ -53,6 +55,18 @@ init_file() {
         echo "Skipping $dest (already exists)."
     fi
 }
+
+init_file ".gemini/settings.json" ".gemini/settings.json"
+init_file ".gemini/policies/aurelius-tools.toml" ".gemini/policies/aurelius-tools.toml"
+
+# Local instruction placeholders (to avoid injection errors)
+init_file ".gemini/commands/aurelius/specific/analyze.md" ".gemini/commands/aurelius/specific/analyze.md"
+init_file ".gemini/commands/aurelius/specific/dev-ticket.md" ".gemini/commands/aurelius/specific/dev-ticket.md"
+init_file ".gemini/commands/aurelius/specific/finalize-ticket.md" ".gemini/commands/aurelius/specific/finalize-ticket.md"
+init_file ".gemini/commands/aurelius/specific/gen-tickets.md" ".gemini/commands/aurelius/specific/gen-tickets.md"
+init_file ".gemini/commands/aurelius/specific/groom-ticket.md" ".gemini/commands/aurelius/specific/groom-ticket.md"
+init_file ".gemini/commands/aurelius/specific/bootstrap-specs.md" ".gemini/commands/aurelius/specific/bootstrap-specs.md"
+init_file ".gemini/commands/aurelius/specific/design.md" ".gemini/commands/aurelius/specific/design.md"
 
 init_file "templates/product-context-template.md" "specs/productContext.md"
 init_file "templates/context-map-template.md" "specs/context-map.md"

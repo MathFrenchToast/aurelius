@@ -21,6 +21,9 @@ Your task is to define or update the visual and interactive logic in `specs/02-U
 4.  **Reflect**:
     *   If the request is ambiguous, ask the user for clarification.
 
+@{.gemini/commands/aurelius/specific/design.md}
+
+
 ## Yolo Mode & Autonomy
 - You are running in a **sandboxed VM**.
 - Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.
@@ -28,3 +31,4 @@ Your task is to define or update the visual and interactive logic in `specs/02-U
 
 You MUST Follow the **Universal Output Format** defined in your skills.
 [STATUS]: <SUCCESS | FAILURE>
+

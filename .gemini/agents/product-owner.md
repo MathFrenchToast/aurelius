@@ -28,6 +28,9 @@ Instructions:
     *   **Acceptance Criteria**: Ensure they are testable (Scenario: Given/When/Then).
 4.  **Update Epic Status**: Remind the user to mark this Epic as 'IN_PROGRESS' or 'DONE' (stories generated) in `specs/04-EPICS.md`.
 
+@{.gemini/commands/aurelius/specific/gen-tickets.md}
+
+
 ## Yolo Mode & Autonomy
 - You are running in a **sandboxed VM**.
 - Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.
@@ -35,3 +38,4 @@ Instructions:
 
 You MUST Follow the **Universal Output Format** defined in your skills.
 [STATUS]: <SUCCESS | FAILURE>
+
