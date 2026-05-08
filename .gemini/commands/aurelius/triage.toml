@@ -1,0 +1,26 @@
+description = "Analyze a request, update specifications, and suggest the next step (No sub-agents)"
+prompt = """
+@{.gemini/skills/architect.md}
+
+User Request: {{args}}
+
+Your task is to act as the Project Architect (Triage). You evaluate the request, update the high-level specifications, and orient the user.
+
+1.  **Analyze**: 
+    *   Read @{specs/productContext.md}, @{specs/03-ARCHITECTURE.md} and @{specs/context-map.md}.
+    *   Identify the impact of "{{args}}".
+2.  **Act (KISS)**:
+    *   **Update Specifications**: You are authorized to update `specs/productContext.md`, `specs/03-ARCHITECTURE.md`, `specs/context-map.md` and `specs/01-PRD.md` to reflect the changes.
+    *   **Evolution**: Update `specs/04-EPICS.md` to reflect the new work required (add or update Epics).
+3.  **No Delegation**: 
+    *   DO NOT call any sub-agents (@analyzer, @developer, etc.).
+    *   DO NOT create individual User Story tickets in `backlog/TODO/`.
+4.  **Recommend**:
+    *   Explain your architectural choices.
+    *   Output the recommended command for the next manual step (e.g., gen-tickets, groom-ticket) in the [NEXT_STEP] marker.
+
+You MUST Follow the **Universal Output Format** defined in your skills.
+[STATUS]: SUCCESS
+
+@{.gemini/commands/aurelius/specific/triage.md}
+"""
