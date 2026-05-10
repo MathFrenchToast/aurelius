@@ -79,7 +79,24 @@ graph TD
     Next -->|Yes| Arch_Analyze
 ```
 
-## 6. Detailed Workflows (Namespace `aurelius:`)
+## 6. Interaction Modes
+
+Aurelius offers two ways to interact with the methodology, depending on the level of autonomy you desire.
+
+### Full Autonomous Orchestration (Command Mode)
+Use the namespaced commands to trigger complex, automated workflows.
+*   **Command:** `gemini aurelius:analyze "requirement"`
+*   **Behavior:** This is the "Orchestrator". It will automatically call multiple sub-agents (@analyzer, @product-owner, @developer, etc.) to transform your requirement into verified code in one go.
+*   **Best for:** End-to-end feature implementation, complex refactoring, and CI/CD automation.
+
+### Targeted Manual Steps (Agent Mode)
+Call specific agents directly for focused tasks without triggering a full automated loop.
+*   **Agent:** `gemini @analyzer "requirement"`
+*   **Behavior:** Only the specific persona is activated. It will perform its task (e.g., updating specs and epics) and wait for your next instruction. It will **not** automatically proceed to ticket generation or implementation.
+*   **Best for:** Strategic planning, fine-grained specification updates, and manual project steering.
+
+
+## 7. Detailed Workflows (Namespace `aurelius:`)
 
 1.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description"`
     *   Initializes project specs (`00-BRIEF`, `01-PRD`, `03-ARCHITECTURE`) from a raw idea.
@@ -126,11 +143,11 @@ This table shows the interaction between Aurelius commands and the specification
 *   ✏️ : Create / Modify
 *   👁️ : Read / Consult
 
-## 7. Interactive Alignment
+## 8. Interactive Alignment
 
 By default, Aurelius agents prioritize alignment over assumptions. If a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible, the agent will list its questions and wait for your input. This ensures the generated specifications and code remain 100% aligned with your vision.
 
-## 8. Ticket Lifecycle (Statuses)
+## 9. Ticket Lifecycle (Statuses)
 
 *   **TODO:** In the backlog, waiting.
 *   **READY:** Groomed by the Architect, ready for Dev.
@@ -138,7 +155,7 @@ By default, Aurelius agents prioritize alignment over assumptions. If a requirem
 *   **REWORK:** Review failure. The developer must fix the acceptance criteria (AC) or quality before a new review.
 *   **DONE:** Validated and archived.
 
-## 9. Workflow Automation (Interoperability)
+## 10. Workflow Automation (Interoperability)
 
 Every Aurelius agent response ends with a standardized footer to facilitate integration with external tools (scripts, CI/CD, workflow orchestrators).
 
@@ -157,6 +174,7 @@ Advanced automation scripts and isolation environments are available in the `/au
 - **`aurelius-n8n-workflow.json`**: Pre-configured n8n workflow for visual orchestration of the methodology.
 - **`aurelius-yolo-workflow.sh`**: A lightweight bash script for rapid, automated execution of the command sequence.
 
-## 10. References
+## 11. References
+
 - [gemini cli custom commands](https://geminicli.com/docs/cli/custom-commands/)
 - [gemini cli settings](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/settings.md)
