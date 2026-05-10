@@ -3,7 +3,7 @@
 # --- Configuration Globale ---
 export GEMINI_YOLO=true
 # export GEMINI_NON_INTERACTIVE=true # Désactivé pour favoriser le streaming
-DEFAULT_BRANCH="main"
+DEFAULT_BRANCH="develop"
 LOG_FILE="aurelius_yolo.log"
 
 log() {
@@ -47,7 +47,7 @@ if [ -n "$ISSUE_NUM" ]; then
     log "Récupération de l'issue #$ISSUE_NUM via GitHub CLI..."
     ISSUE_DATA=$(gh issue view "$ISSUE_NUM" --json title,body)
     ISSUE_BODY=$(echo "$ISSUE_DATA" | jq -r '.body')
-    BRANCH_NAME="fix/issue-$ISSUE_NUM"
+    BRANCH_NAME="feat/issue-$ISSUE_NUM"
     FIRST_GEMINI_CMD="/aurelius:analyze issue: $ISSUE_NUM body: $ISSUE_BODY"
     # Setup Git
     log "Préparation de la branche $BRANCH_NAME..."
