@@ -1,23 +1,2 @@
 description = "Emergency fix for a bug"
-prompt = """
-@{.gemini/skills/developer.md}
-
-Task: {{args}}
-
-Your task is to implement an emergency fix.
-
-1.  **Analyze**: Understand the bug.
-2.  **Implement (TDD)**: Create a test, fix, refactor.
-3.  **Verify**: Ensure tests pass.
-
-@{.gemini/commands/aurelius/specific/hotfix.md}
-
-
-## Yolo Mode & Autonomy
-- You are running in a **sandboxed VM**.
-- Prioritize **autonomy** and execution. If you encounter a minor issue, fix it yourself.
-- Only ask the user for critical decisions or blocking ambiguities.
-
-You MUST Follow the **Universal Output Format** defined in your skills.
-[STATUS]: <SUCCESS | FAILURE>
-"""
+prompt = "@developer {{args}}"

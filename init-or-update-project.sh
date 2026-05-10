@@ -1,22 +1,19 @@
 #!/bin/bash
 
 # Aurelius - SpecMethodDevLite - Project Initializer / Updater
-# Usage: ./init-or-update-project.sh <path-to-target-project> [mode]
-# Mode: commands | agent | hybrid (default)
+# Usage: ./init-or-update-project.sh <path-to-target-project>
 
 if [ -z "$1" ]; then
-    echo "Usage: $0 <path-to-target-project> [mode]"
+    echo "Usage: $0 <path-to-target-project>"
     exit 1
 fi
 
 TARGET_DIR=$1
-INSTALL_MODE=${2:-"hybrid"}
 SOURCE_DIR=$(dirname "$(readlink -f "$0")")
 
 echo "--- Aurelius Framework Setup ---"
 echo "Source: $SOURCE_DIR"
 echo "Target: $TARGET_DIR"
-echo "Mode:   $INSTALL_MODE"
 
 # 1. Ensure Target Directories exist
 mkdir -p "$TARGET_DIR/.gemini"
@@ -34,25 +31,12 @@ mkdir -p "$TARGET_DIR/backlog/TODO"
 mkdir -p "$TARGET_DIR/backlog/WIP"
 mkdir -p "$TARGET_DIR/backlog/DONE"
 
-# 2. Update Configuration (Force Overwrite)
-echo "Updating configuration..."
-
-# Skills are always needed as they are the core logic
+# 2. Update Config, Skills, Agents, Policies, Hooks & Settings (Force Overwrite)
+echo "Updating configuration, skills, agents, policies, hooks and settings..."
 cp -rf "$SOURCE_DIR/.gemini/skills/"* "$TARGET_DIR/.gemini/skills/"
-
-# Agents
-if [[ "$INSTALL_MODE" == "hybrid" || "$INSTALL_MODE" == "agent" ]]; then
-    echo "Installing Agents..."
-    cp -rf "$SOURCE_DIR/.gemini/agents/"* "$TARGET_DIR/.gemini/agents/"
-fi
-
-# Commands
-if [[ "$INSTALL_MODE" == "hybrid" || "$INSTALL_MODE" == "commands" ]]; then
-    echo "Installing Commands..."
-    # Update command files directly, skipping directories (like 'specific/') to preserve user customizations
-    cp -f "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/" 2>/dev/null || true
-fi
-
+cp -rf "$SOURCE_DIR/.gemini/agents/"* "$TARGET_DIR/.gemini/agents/"
+# Update command files directly, skipping directories (like 'specific/') to preserve user customizations
+cp -f "$SOURCE_DIR/.gemini/commands/aurelius/"* "$TARGET_DIR/.gemini/commands/aurelius/" 2>/dev/null || true
 cp -rf "$SOURCE_DIR/.gemini/hooks/"* "$TARGET_DIR/.gemini/hooks/"
 cp -rf "$SOURCE_DIR/templates/"* "$TARGET_DIR/templates/"
 
@@ -83,7 +67,6 @@ init_file ".gemini/commands/aurelius/specific/gen-tickets.md" ".gemini/commands/
 init_file ".gemini/commands/aurelius/specific/groom-ticket.md" ".gemini/commands/aurelius/specific/groom-ticket.md"
 init_file ".gemini/commands/aurelius/specific/bootstrap-specs.md" ".gemini/commands/aurelius/specific/bootstrap-specs.md"
 init_file ".gemini/commands/aurelius/specific/design.md" ".gemini/commands/aurelius/specific/design.md"
-init_file ".gemini/commands/aurelius/specific/triage.md" ".gemini/commands/aurelius/specific/triage.md"
 
 init_file "templates/product-context-template.md" "specs/productContext.md"
 init_file "templates/context-map-template.md" "specs/context-map.md"
