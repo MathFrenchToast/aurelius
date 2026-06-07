@@ -23,7 +23,7 @@ To initialize a new project or update the methodology in an existing one:
 ```
 
 This script will:
-*   Install/Update `.gemini/` skills and namespaced commands (`/aurelius:...`).
+*   Install/Update `.agent/` skills.
 *   Setup the `specs/` and `backlog/` folder structure.
 *   Initialize template files if they don't already exist.
 
@@ -31,10 +31,12 @@ This script will:
 
 ``` 
 .
-├── .gemini/
-│   ├── commands/aurelius/  # Workflows (bootstrap, analyze, dev, finalize...)
-│   ├── skills/             # Personas (pm, po, arch, dev, reviewer, designer)
-│   └── policies/           # Tool auto-approval (TOML Policies)
+├── .agent/
+│   ├── skills/             # Skills (bootstrap-specs, analyze, design, gen-tickets, groom-ticket, dev-ticket, finalize-ticket, hotfix)
+│   ├── policies/           # Tool auto-approval (TOML Policies)
+│   ├── hooks/              # Script hooks (e.g. log-workflow.cjs)
+│   ├── settings.json       # General settings
+│   └── mcp_config.json     # Isolated MCP configurations
 ├── specs/                  # The Truth (Living Documentation)
 │   ├── productContext.md   # High-level Vision and Tech Stack (System Prompt)
 │   ├── context-map.md      # Technical Index (Feature -> Files)
@@ -62,18 +64,18 @@ This script will:
 
 ## 5. Workflow Overview
 
-Aurelius agents are "workflow-aware". At the end of each task, the agent will recommend the next logical step to keep the project moving.
+Aurelius skills are "workflow-aware". At the end of each task, the skill will recommend the next logical step to keep the project moving.
 
 ```mermaid
 graph TD
-    User([User Idea]) --> PM[aurelius:bootstrap-specs]
-    PM -->|Recommend| Arch_Analyze[aurelius:analyze]
-    PM -->|Recommend| UX[aurelius:design]
-    Arch_Analyze -->|Recommend| PO[aurelius:gen-tickets]
+    User([User Idea]) --> PM[@bootstrap-specs]
+    PM -->|Recommend| Arch_Analyze[@analyze]
+    PM -->|Recommend| UX[@design]
+    Arch_Analyze -->|Recommend| PO[@gen-tickets]
     UX -->|Recommend| PO
-    PO -->|Recommend| Arch_Groom[aurelius:groom-ticket]
-    Arch_Groom -->|Status: READY| Dev[aurelius:dev-ticket]
-    Dev -->|Status: WIP| Rev[aurelius:finalize-ticket]
+    PO -->|Recommend| Arch_Groom[@groom-ticket]
+    Arch_Groom -->|Status: READY| Dev[@dev-ticket]
+    Dev -->|Status: WIP| Rev[@finalize-ticket]
     Rev -->|Status: DONE| Next{Backlog empty?}
     Next -->|No| Arch_Groom
     Next -->|Yes| Arch_Analyze
@@ -84,53 +86,53 @@ graph TD
 Aurelius offers two ways to interact with the methodology, depending on the level of autonomy you desire.
 
 ### Full Autonomous Orchestration (Command Mode)
-Use the namespaced commands to trigger complex, automated workflows.
-*   **Command:** `gemini aurelius:analyze "requirement"`
-*   **Behavior:** This is the "Orchestrator". It will automatically call multiple sub-agents (@analyzer, @product-owner, @developer, etc.) to transform your requirement into verified code in one go.
+Use the orchestrator skill to trigger complex, automated workflows.
+*   **Command:** `@analyze "requirement"`
+*   **Behavior:** This is the "Orchestrator". It will automatically update specs, generate tickets, and call sub-agents with appropriate skills (`@groom-ticket`, `@dev-ticket`, `@finalize-ticket`) to transform your requirement into verified code.
 *   **Best for:** End-to-end feature implementation, complex refactoring, and CI/CD automation.
 
-### Targeted Manual Steps (Agent Mode)
-Call specific agents directly for focused tasks without triggering a full automated loop.
-*   **Agent:** `gemini @analyzer "requirement"`
-*   **Behavior:** Only the specific persona is activated. It will perform its task (e.g., updating specs and epics) and wait for your next instruction. It will **not** automatically proceed to ticket generation or implementation.
+### Targeted Manual Steps (Skill Mode)
+Call specific skills directly for focused tasks.
+*   **Command:** `@dev-ticket "US-01-EPIC-001"`
+*   **Behavior:** Only the specific skill is activated. It will perform its task and wait for your next instruction. It will **not** automatically proceed to the next phase without your approval.
 *   **Best for:** Strategic planning, fine-grained specification updates, and manual project steering.
 
 
-## 7. Detailed Workflows (Namespace `aurelius:`)
+## 7. Detailed Workflows (Skills `@`)
 
-1.  **Bootstrap:** `gemini aurelius:bootstrap-specs "Description"`
+1.  **Bootstrap:** `@bootstrap-specs "Description"`
     *   Initializes project specs (`00-BRIEF`, `01-PRD`, `03-ARCHITECTURE`) from a raw idea.
-2.  **Analyze:** `gemini aurelius:analyze "Your request"`
-    *   Analyzes the current state and recommends the next strategic move (Design, Tickets, or Code).
-3.  **Design (Optional):** `gemini aurelius:design "global"`
+2.  **Analyze:** `@analyze "Your request"`
+    *   Analyzes the current state, updates specs/epics, and orchestrates the implementation of the requirement.
+3.  **Design (Optional):** `@design "global"`
     *   Generates text-based UX/UI flows in `specs/02-UX-DESIGN.md`.
-4.  **Tickets:** `gemini aurelius:gen-tickets "Epic Name"`
+4.  **Tickets:** `@gen-tickets "Epic Name"`
     *   Generates User Stories in `backlog/TODO/` based on the PRD and Epics.
-5.  **Grooming:** `gemini aurelius:groom-ticket US-01-EPIC-001`
+5.  **Grooming:** `@groom-ticket US-01-EPIC-001`
     *   Architect adds technical notes and checks feasibility. Moves ticket to `READY`.
-6.  **Dev:** `gemini aurelius:dev-ticket US-01-EPIC-001`
+6.  **Dev:** `@dev-ticket US-01-EPIC-001`
     *   Developer implements the story (TDD). Moves ticket to `WIP`. **Forbidden to move to DONE.**
-7.  **Finalize:** `gemini aurelius:finalize-ticket`
+7.  **Finalize:** `@finalize-ticket`
     *   Reviewer checks code and tests.
-    *   **Success:** Moves to `DONE` and commits.
+    *   **Success:** Moves to `DONE` and prompts for commit.
     *   **Failure:** Moves to `REWORK` with feedback.
-8.  **Hotfix:** `gemini aurelius:hotfix "Critical bug description"`
+8.  **Hotfix:** `@hotfix "Critical bug description"`
     *   Urgent correction workflow bypassing standard grooming if necessary.
 
-### Command vs. Specs Mapping
+### Skill vs. Specs Mapping
 
-This table shows the interaction between Aurelius commands and the specification files in `specs/`.
+This table shows the interaction between Aurelius skills and the specification files in `specs/`.
 
-| Command | Skill | PC | CM | BR | PR | UX | AR | EP |
+| Skill | Persona | PC | CM | BR | PR | UX | AR | EP |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `bootstrap-specs` | Product Manager | ✏️ | | ✏️ | ✏️ | | ✏️ | ✏️ |
-| `analyze` | Architect | ✏️ | ✏️ | | ✏️ | | ✏️ | ✏️ |
-| `design` | Designer | 👁️ | | | 👁️ | ✏️ | | |
-| `gen-tickets` | Product Owner | | | | 👁️ | | | 👁️ |
-| `groom-ticket` | Architect | | 👁️ | | | 👁️ | 👁️ | |
-| `dev-ticket` | Developer | 👁️ | 👁️ | | | 👁️ | | |
-| `finalize-ticket` | Reviewer | | | | | | | |
-| `hotfix` | Developer | | 👁️ | | | | 👁️ | |
+| `@bootstrap-specs` | Product Manager | ✏️ | | ✏️ | ✏️ | | ✏️ | ✏️ |
+| `@analyze` | Architect / Orchestrator | ✏️ | ✏️ | | ✏️ | | ✏️ | ✏️ |
+| `@design` | Designer | 👁️ | | | 👁️ | ✏️ | | |
+| `@gen-tickets` | Product Owner | | | | 👁️ | | | 👁️ |
+| `@groom-ticket` | Architect | | 👁️ | | | 👁️ | 👁️ | |
+| `@dev-ticket` | Developer | 👁️ | 👁️ | | | 👁️ | | |
+| `@finalize-ticket` | Reviewer | | | | | | | |
+| `@hotfix` | Developer | | 👁️ | | | | 👁️ | |
 
 **Legend:**
 *   **PC:** `productContext.md` (Vision & Tech Stack)
@@ -143,9 +145,10 @@ This table shows the interaction between Aurelius commands and the specification
 *   ✏️ : Create / Modify
 *   👁️ : Read / Consult
 
+
 ## 8. Interactive Alignment
 
-By default, Aurelius agents prioritize alignment over assumptions. If a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible, the agent will list its questions and wait for your input. This ensures the generated specifications and code remain 100% aligned with your vision.
+By default, Aurelius skills prioritize alignment over assumptions. If a requirement is ambiguous, if business rules are missing, or if multiple architectural paths are possible, the skill will list its questions and wait for your input. This ensures the generated specifications and code remain 100% aligned with your vision.
 
 ## 9. Ticket Lifecycle (Statuses)
 
@@ -157,14 +160,15 @@ By default, Aurelius agents prioritize alignment over assumptions. If a requirem
 
 ## 10. Workflow Automation (Interoperability)
 
-Every Aurelius agent response ends with a standardized footer to facilitate integration with external tools (scripts, CI/CD, workflow orchestrators).
+Every Aurelius response ends with a standardized footer to facilitate integration with external tools (scripts, CI/CD, workflow orchestrators).
 
 ```text
 [SUMMARY]: <Short description of the work performed>
-[NEXT_STEP]: <The recommended aurelius:command to continue the workflow>
+[STATUS]: <SUCCESS | FAILURE | IN_PROGRESS>
+[NEXT_STEP]: <The recommended @skill-name to continue the workflow>
 ```
 
-When calling Gemini CLI with the `--json` flag, these markers can be easily parsed from the `content` field using regex to automate the next action.
+When calling Antigravity CLI with the `--json` flag, these markers can be easily parsed from the `content` field using regex to automate the next action.
 
 Advanced automation scripts and isolation environments are available in the `/automate/` directory:
 
@@ -176,5 +180,5 @@ Advanced automation scripts and isolation environments are available in the `/au
 
 ## 11. References
 
-- [gemini cli custom commands](https://geminicli.com/docs/cli/custom-commands/)
-- [gemini cli settings](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/settings.md)
+- [antigravity-cli documentation](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/settings.md)
+

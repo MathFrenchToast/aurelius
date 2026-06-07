@@ -1,0 +1,28 @@
+{
+  "tools": {
+    "autoAccept": true
+  },
+  "security": {
+    "enablePermanentToolApproval": true
+  },
+  "experimental": {
+    "skills": true
+  },
+  "general": {
+    "defaultApprovalMode": "auto_edit"
+  },
+  "hooks": {
+    "AfterAgent": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "name": "log-workflow",
+            "type": "command",
+            "command": "node .agent/hooks/log-workflow.cjs"
+          }
+        ]
+      }
+    ]
+  }
+}

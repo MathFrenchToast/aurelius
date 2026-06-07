@@ -1,0 +1,13 @@
+# Aurelius - Tool Approval Policy
+# Updated for Antigravity compatibility.
+
+[[rule]]
+toolName = ["run_command"]
+commandPrefix = ["ls", "mkdir", "touch", "mv", "cp", "rm", "grep", "sed", "cat", "find", "git status", "git diff", "git log", "git show", "git checkout", "npm test", "npm run lint", "npx"]
+decision = "allow"
+priority = 999
+
+[[rule]]
+toolName = ["view_file", "write_to_file", "replace_file_content", "multi_replace_file_content", "list_dir", "grep_search"]
+decision = "allow"
+priority = 999
